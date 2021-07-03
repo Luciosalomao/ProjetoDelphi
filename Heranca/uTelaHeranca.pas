@@ -194,7 +194,6 @@ procedure TfrmTelaHeranca.btnAlterarClick(Sender: TObject);
 begin
   ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar,
    btnNavegator, pgcPrincipal, false);
-
    EstadoDoCadastro:=ecAlterar;
 end;
 
@@ -206,6 +205,7 @@ try
       ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar,
       btnNavegator, pgcPrincipal, true);
       ControlarIndiceTab(pgcPrincipal, 0);
+      qryListagem.Refresh;
    end
    else
    begin
@@ -242,6 +242,7 @@ begin
        ControlarIndiceTab(pgcPrincipal, 0);
        EstadoDoCadastro:=ecNenhum;
        LimparEdits;
+       qryListagem.Refresh;
      end
      else
      begin
