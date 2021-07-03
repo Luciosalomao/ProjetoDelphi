@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB,
   ZAbstractRODataset, ZAbstractDataset, ZDataset, Vcl.StdCtrls, Vcl.Mask,
   Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons, Vcl.ExtCtrls,
-  uCadCategoria, Vcl.ComCtrls;
+  uCadCategoria, Vcl.ComCtrls, uDM, uEnum;
 
 type
   TfrmCadCategoria = class(TfrmTelaHeranca)
@@ -21,6 +21,8 @@ type
   private
     { Private declarations }
     oCategoria: TCategoria;
+    function Excluir:Boolean; override; //método virtual
+    function Gravar(EstadoDoCadastro: TEstadoDoCadastro): boolean; override;
   public
     { Public declarations }
   end;
@@ -31,6 +33,20 @@ var
 implementation
 
 {$R *.dfm}
+{$region 'Override'}
+function TfrmCadCategoria.Excluir: Boolean;
+begin
+  Result:= oCategoria.Apagar;
+end;
+
+function TfrmCadCategoria.Gravar(EstadoDoCadastro: TEstadoDoCadastro): boolean;
+begin
+   if (EstadoDoCadastro=ecInserir) then
+     Result:=oCategoria.Gravar
+   else if (EstadoDoCadastro=ecAlterar) then
+     Result:=oCategoria.Atualizar;
+end;
+{$endregion}
 
 procedure TfrmCadCategoria.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
@@ -42,8 +58,7 @@ end;
 procedure TfrmCadCategoria.FormCreate(Sender: TObject);
 begin
   inherited;
-  oCategoria:=TCategoria.Create;
+  oCategoria:=TCategoria.Create(dmConexao.conexaoDB);
   indiceAtual:='descricao';
 end;
-
 end.

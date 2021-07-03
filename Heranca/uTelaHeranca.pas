@@ -43,8 +43,6 @@ type
     procedure grdListagemDblClick(Sender: TObject);
   private
     { Private declarations }
-    EstadoDoCadastro: TEstadoDoCadastro;
-
     procedure ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar,
         btnApagar: TBitBtn; btnNavegator: TDBNavigator; pgcPrincipal: TPageControl; Flag:Boolean);
     procedure ControlarIndiceTab(pgcPrincipal: TPageControl; indice: Integer);
@@ -55,6 +53,7 @@ type
     procedure LimparEdits;
   public
     { Public declarations }
+    EstadoDoCadastro: TEstadoDoCadastro;
     indiceAtual: String;
     function Excluir:Boolean; virtual; //método virtual
     function Gravar(EstadoDoCadastro: TEstadoDoCadastro): boolean; virtual;
