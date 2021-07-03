@@ -4,20 +4,23 @@
     <Transaction>2021/06/28 11:35:06.000.242,=C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
     <Transaction>2021/06/28 11:38:06.000.203,=C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
     <Transaction>2021/06/29 22:30:31.000.807,=C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
-    <Transaction>2021/06/29 22:30:52.000.486,C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Unit2.pas=C:\ProjetoDelphi\uPrincipal.pas</Transaction>
-    <Transaction>2021/06/29 22:30:52.000.486,C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Unit2.dfm=C:\ProjetoDelphi\uPrincipal.dfm</Transaction>
-    <Transaction>2021/06/29 22:31:08.000.559,C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Project2.dproj=C:\ProjetoDelphi\Vendas.dproj</Transaction>
+    <Transaction>2021/06/29 22:30:52.000.486,C:\ProjetoDelphi\uPrincipal.dfm=C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>2021/06/29 22:30:52.000.486,C:\ProjetoDelphi\uPrincipal.pas=C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2021/06/29 22:31:08.000.559,C:\ProjetoDelphi\Vendas.dproj=C:\Users\Lucio\Documents\Embarcadero\Studio\Projects\Project2.dproj</Transaction>
     <Transaction>2021/06/30 07:21:01.000.895,=C:\ProjetoDelphi\Unit1.pas</Transaction>
-    <Transaction>2021/06/30 07:21:37.000.886,C:\ProjetoDelphi\uDM.dfm=C:\ProjetoDelphi\Unit1.dfm</Transaction>
-    <Transaction>2021/06/30 07:21:37.000.886,C:\ProjetoDelphi\uDM.pas=C:\ProjetoDelphi\Unit1.pas</Transaction>
+    <Transaction>2021/06/30 07:21:37.000.886,C:\ProjetoDelphi\Unit1.dfm=C:\ProjetoDelphi\uDM.dfm</Transaction>
+    <Transaction>2021/06/30 07:21:37.000.886,C:\ProjetoDelphi\Unit1.pas=C:\ProjetoDelphi\uDM.pas</Transaction>
     <Transaction>2021/06/30 12:45:57.000.301,=C:\ProjetoDelphi\Unit1.pas</Transaction>
-    <Transaction>2021/06/30 12:47:00.000.739,C:\ProjetoDelphi\Unit1.pas=C:\ProjetoDelphi\Heranca\uTelaHeranca.pas</Transaction>
-    <Transaction>2021/06/30 12:47:00.000.739,C:\ProjetoDelphi\Unit1.dfm=C:\ProjetoDelphi\Heranca\uTelaHeranca.dfm</Transaction>
+    <Transaction>2021/06/30 12:47:00.000.739,C:\ProjetoDelphi\Heranca\uTelaHeranca.pas=C:\ProjetoDelphi\Unit1.pas</Transaction>
+    <Transaction>2021/06/30 12:47:00.000.739,C:\ProjetoDelphi\Heranca\uTelaHeranca.dfm=C:\ProjetoDelphi\Unit1.dfm</Transaction>
     <Transaction>2021/06/30 13:29:27.000.330,=C:\ProjetoDelphi\Unit1.pas</Transaction>
-    <Transaction>2021/06/30 13:30:28.000.230,C:\ProjetoDelphi\Unit1.dfm=C:\ProjetoDelphi\Cadastro\uCadCategorias.dfm</Transaction>
-    <Transaction>2021/06/30 13:30:28.000.230,C:\ProjetoDelphi\Unit1.pas=C:\ProjetoDelphi\Cadastro\uCadCategorias.pas</Transaction>
+    <Transaction>2021/06/30 13:30:28.000.230,C:\ProjetoDelphi\Cadastro\uCadCategorias.pas=C:\ProjetoDelphi\Unit1.pas</Transaction>
+    <Transaction>2021/06/30 13:30:28.000.230,C:\ProjetoDelphi\Cadastro\uCadCategorias.dfm=C:\ProjetoDelphi\Unit1.dfm</Transaction>
     <Transaction>2021/06/30 20:08:22.000.575,=C:\ProjetoDelphi\terceiros\Enter.pas</Transaction>
     <Transaction>2021/06/30 21:40:33.000.751,=C:\ProjetoDelphi\Unit1.pas</Transaction>
-    <Transaction>2021/06/30 21:40:54.000.313,C:\ProjetoDelphi\Heranca\uEnum.pas=C:\ProjetoDelphi\Unit1.pas</Transaction>
+    <Transaction>2021/06/30 21:40:54.000.313,C:\ProjetoDelphi\Unit1.pas=C:\ProjetoDelphi\Heranca\uEnum.pas</Transaction>
+    <Transaction>2021/07/03 14:56:14.617,=C:\ProjetoDelphi\Unit1.pas</Transaction>
+    <Transaction>2021/07/03 14:56:31.071,=C:\ProjetoDelphi\Unit1.pas</Transaction>
+    <Transaction>2021/07/03 14:56:47.740,C:\ProjetoDelphi\Classes\uCadCategoria.pas=C:\ProjetoDelphi\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>
