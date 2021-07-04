@@ -54,7 +54,16 @@ end;
 
 function TfrmCadCategoria.Excluir: Boolean;
 begin
-  Result:= oCategoria.Apagar;
+  if oCategoria.Selecionar(qryListagem.FieldByName('categoriaId').AsInteger) then
+  begin
+      Result:= oCategoria.Apagar;
+  end
+  else
+  begin
+     btnCancelar.Click;
+     Abort;
+  end;
+
 end;
 
 function TfrmCadCategoria.Gravar(EstadoDoCadastro: TEstadoDoCadastro): boolean;
