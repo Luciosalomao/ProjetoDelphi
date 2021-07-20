@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, System.UITypes, Vcl.Controls, Vcl.Forms,
   Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Data.DB,   Vcl.Grids, Vcl.DBGrids,
   Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, Vcl.DBCtrls, ZAbstractRODataset,
-  ZAbstractDataset, ZDataset, uDM, uEnum;
+  ZAbstractDataset, ZDataset, uDM, uEnum, RxToolEdit, RxCurrEdit;
 
 type
   TfrmTelaHeranca = class(TForm)
@@ -41,6 +41,8 @@ type
     procedure grdListagemTitleClick(Column: TColumn);
     procedure mskPesquisarChange(Sender: TObject);
     procedure grdListagemDblClick(Sender: TObject);
+    procedure grdListagemKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     procedure ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar,
@@ -57,6 +59,7 @@ type
     indiceAtual: String;
     function Excluir:Boolean; virtual; //método virtual
     function Gravar(EstadoDoCadastro: TEstadoDoCadastro): boolean; virtual;
+    procedure BloqueiaCTRL_DEL_DBGrid(var key: Word; Shift: TShiftState);
   end;
 
 var
@@ -157,7 +160,15 @@ Begin
     if (Components[i] is TLabeledEdit) then
        TLabeledEdit(Components[i]).Text:=EmptyStr
     else if (Components[i] is TEdit) then
-       TEdit(Components[i]).Text:=EmptyStr;
+       TEdit(Components[i]).Text:=EmptyStr
+    else if (Components[i] is TMaskEdit) then
+       TMaskEdit(Components[i]).Text:=EmptyStr
+    else if (Components[i] is TMemo) then
+       TMemo(Components[i]).Lines.Clear
+    else if (Components[i] is TCurrencyEdit) then
+       TCurrencyEdit(Components[i]).Text:=EmptyStr
+    else if (Components[i] is TDBLookupComboBox) then
+       TDBLookupComboBox(Components[i]).keyvalue:=NULL
     End;
 End;
 
@@ -289,6 +300,12 @@ begin
   btnAlterar.Click;
 end;
 
+procedure TfrmTelaHeranca.grdListagemKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   BloqueiaCTRL_DEL_DBGrid(Key, Shift);
+end;
+
 procedure TfrmTelaHeranca.grdListagemTitleClick(Column: TColumn);
 begin
   indiceAtual:=Column.FieldName; //seta a variavel com o índice do grid
@@ -300,5 +317,15 @@ procedure TfrmTelaHeranca.mskPesquisarChange(Sender: TObject);
 begin
   qryListagem.Locate(indiceAtual, TMaskEdit(Sender).Text, [loPartialKey]);
 end;
+
+procedure TfrmTelaHeranca.BloqueiaCTRL_DEL_DBGrid(var key: Word; Shift: TShiftState);
+begin
+  //Bloqueia o CTRL + DEL
+  if (Shift = [ssCtrl]) and (Key = 46) then
+      key := 0;
+end;
+
+
+
 
 end.

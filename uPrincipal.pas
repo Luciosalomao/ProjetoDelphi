@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, uDM, Enter;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, uDM, Enter, ufrmAtualizaDB;
 
 type
   TfrmPrincipal = class(TForm)
@@ -28,9 +28,13 @@ type
     procedure FormCreate(Sender: TObject);
     procedure Categoria1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Cliente1Click(Sender: TObject);
+    procedure Produto1Click(Sender: TObject);
+    procedure Venda1Click(Sender: TObject);
   private
     { Private declarations }
-    TeclaEnter: TMREnter; //Código que troca o tab pelo enter e muda a cor - componente de terceiro
+    TeclaEnter: TMREnter;
+    procedure AtualizacaoBancoDados(aForm: TfrmAtualizaDB); //Código que troca o tab pelo enter e muda a cor - componente de terceiro
   public
     { Public declarations }
   end;
@@ -42,13 +46,20 @@ implementation
 
 {$R *.dfm}
 
-uses uCadCategorias;
+uses uCadCategorias, uTelaDeCliente, uTelaDeProduto, uProVendas;
 
 procedure TfrmPrincipal.Categoria1Click(Sender: TObject);
 begin
   frmCadCategoria:=TfrmCadCategoria.create(self);
   frmCadCategoria.showModal;
   frmCadCategoria.release;  {Destroi o componente}
+end;
+
+procedure TfrmPrincipal.Cliente1Click(Sender: TObject);
+begin
+  frmTelaDeCliente:=TfrmTelaDeCliente.create(self);
+  frmTelaDeCliente.showModal;
+  frmTelaDeCliente.release;
 end;
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -60,6 +71,10 @@ end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
+  frmAtualizaDB := TfrmAtualizaDB.create(Self);  {Cria o form de atualização}
+  frmAtualizaDB.Show;
+  frmAtualizaDB.Refresh;
+
   dmConexao:= TdmConexao.Create(Self);     //cria o formulario
  { dmConexao.conexaoDB.SQLHourGlass:=true;  //muda a ampulheta
   dmConexao.conexaoDB.Protocol:='mssql';
@@ -82,6 +97,8 @@ begin
     Database:='Vendas';
     Connected:=true;   //cria o banco
   end;
+  AtualizacaoBancoDados(frmAtualizaDB);
+  frmAtualizaDB.Free;  {destroi o form de atualização}
 
   TeclaEnter:= TMREnter.Create(Self);
   TeclaEnter.FocusEnabled:=true;
@@ -91,6 +108,48 @@ end;
 procedure TfrmPrincipal.mnuFecharClick(Sender: TObject);
 begin
 Application.Terminate;
+end;
+
+procedure TfrmPrincipal.Produto1Click(Sender: TObject);
+begin
+  frmTelaProdutos:=TfrmTelaProdutos.create(self);
+  frmTelaProdutos.showModal;
+  frmTelaProdutos.release;
+end;
+
+procedure TfrmPrincipal.Venda1Click(Sender: TObject);
+begin
+  //crtl + F9 para adicionar as uses
+  frmProVendas:=TfrmProVendas.create(self);
+  frmProVendas.showModal;
+  frmProVendas.release;
+end;
+
+procedure TfrmPrincipal.AtualizacaoBancoDados(aForm: TfrmAtualizaDB);
+begin
+    aForm.chkConexao.checked := true;
+    aForm.refresh;
+
+    dmConexao.qryScriptCategorias.ExecSQL;
+    aForm.chkCategorias.Checked := true;
+    aForm.refresh;
+    sleep(250);
+    dmConexao.qryScriptProdutos.ExecSQL;
+    aForm.chkProdutos.Checked := true;
+    aForm.refresh;
+    sleep(250);
+    dmConexao.qryScriptClientes.ExecSQL;
+    aForm.chkClientes.Checked := true;
+    aForm.refresh;
+    sleep(250);
+    dmConexao.qryScriptVendas.ExecSQL;
+    aForm.chkVendas.Checked := true;
+    aForm.refresh;
+    sleep(250);
+    dmConexao.qryScriptVendasItens.ExecSQL;
+    aForm.chkVendasItens.Checked := true;
+    aForm.refresh;
+    sleep(250);
 end;
 
 end.

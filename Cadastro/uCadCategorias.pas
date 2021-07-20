@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   uTelaHeranca, Data.DB, ZAbstractRODataset, ZAbstractDataset, ZDataset,
   Vcl.StdCtrls, Vcl.Mask, Vcl.DBCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.Buttons,
-  Vcl.ExtCtrls, uCadCategoria, Vcl.ComCtrls, uDM, uEnum;
+  Vcl.ExtCtrls, cCadCategoria, Vcl.ComCtrls, uDM, uEnum;
 
 type
   TfrmCadCategoria = class(TfrmTelaHeranca)
@@ -19,6 +19,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnAlterarClick(Sender: TObject);
+    procedure grdListagemTitleClick(Column: TColumn);
   private
     { Private declarations }
     oCategoria: TCategoria; //Criado com a unit uCadCategoria
@@ -77,8 +78,15 @@ begin
    if (EstadoDoCadastro=ecInserir) then
      Result:=oCategoria.Inserir
    else if (EstadoDoCadastro=ecAlterar) then
-     Result:=oCategoria.Atualizar;
+     Result:= oCategoria.Atualizar;
 end;
+
+procedure TfrmCadCategoria.grdListagemTitleClick(Column: TColumn);
+begin
+  inherited;
+
+end;
+
 {$endregion}
 
 procedure TfrmCadCategoria.FormClose(Sender: TObject; var Action: TCloseAction);

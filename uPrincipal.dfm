@@ -25,6 +25,7 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Cadastro'
       object Cliente1: TMenuItem
         Caption = 'Cliente'
+        OnClick = Cliente1Click
       end
       object N1: TMenuItem
         Caption = '-'
@@ -35,6 +36,7 @@ object frmPrincipal: TfrmPrincipal
       end
       object Produto1: TMenuItem
         Caption = 'Produto'
+        OnClick = Produto1Click
       end
       object N2: TMenuItem
         Caption = '-'
@@ -48,6 +50,7 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Movimenta'#231#227'o'
       object Venda1: TMenuItem
         Caption = 'Venda'
+        OnClick = Venda1Click
       end
     end
     object Relatrios1: TMenuItem
