@@ -1,0 +1,69 @@
+unit uRelCadClienteFicha;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, RLPDFFilter, RLXLSXFilter, RLFilters,
+  RLXLSFilter, Data.DB, ZAbstractRODataset, ZAbstractDataset, ZDataset, RLReport;
+
+type
+  TfrmRelCadClienteFicha = class(TForm)
+    Relatorio: TRLReport;
+    Cabecalho: TRLBand;
+    RLLabel1: TRLLabel;
+    RLDraw1: TRLDraw;
+    Rodape: TRLBand;
+    RLDraw2: TRLDraw;
+    RLSystemInfo1: TRLSystemInfo;
+    RLSystemInfo2: TRLSystemInfo;
+    RLSystemInfo3: TRLSystemInfo;
+    RLLabel2: TRLLabel;
+    RLLabel3: TRLLabel;
+    RLBand1: TRLBand;
+    RLDBText1: TRLDBText;
+    RLDBText2: TRLDBText;
+    RLDBText3: TRLDBText;
+    RLDBText4: TRLDBText;
+    RLBand2: TRLBand;
+    RLPanel1: TRLPanel;
+    RLLabel8: TRLLabel;
+    RLLabel6: TRLLabel;
+    RLLabel5: TRLLabel;
+    RLLabel7: TRLLabel;
+    qryClientes: TZQuery;
+    qryClientesclienteId: TIntegerField;
+    qryClientesnome: TWideStringField;
+    qryClientesemail: TWideStringField;
+    qryClientestelefone: TWideStringField;
+    dtsClientes: TDataSource;
+    RLXLSFilter1: TRLXLSFilter;
+    RLXLSXFilter1: TRLXLSXFilter;
+    RLPDFFilter1: TRLPDFFilter;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmRelCadClienteFicha: TfrmRelCadClienteFicha;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmRelCadClienteFicha.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  qryClientes.Close;
+end;
+
+procedure TfrmRelCadClienteFicha.FormCreate(Sender: TObject);
+begin
+  qryClientes.Open;
+end;
+
+end.

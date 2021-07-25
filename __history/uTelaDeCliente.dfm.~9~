@@ -1,0 +1,147 @@
+inherited frmTelaDeCliente: TfrmTelaDeCliente
+  Caption = 'Cadastro de Cliente'
+  ClientWidth = 669
+  ExplicitWidth = 675
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited pgcPrincipal: TPageControl
+    Width = 669
+    ActivePage = TabManutencao
+    inherited TabListagem: TTabSheet
+      inherited pnlListagemTopo: TPanel
+        Width = 661
+        inherited mskPesquisar: TMaskEdit
+          Left = 7
+          Top = 26
+          ExplicitLeft = 7
+          ExplicitTop = 26
+        end
+      end
+      inherited grdListagem: TDBGrid
+        Width = 661
+      end
+    end
+    inherited TabManutencao: TTabSheet
+      ExplicitLeft = 4
+      ExplicitTop = 24
+      ExplicitWidth = 688
+      ExplicitHeight = 369
+      object lblCep: TLabel
+        Left = 512
+        Top = 81
+        Width = 19
+        Height = 13
+        Caption = 'CEP'
+      end
+      object ldlTelefone: TLabel
+        Left = 460
+        Top = 177
+        Width = 42
+        Height = 13
+        Caption = 'Telefone'
+      end
+      object edtDescricao: TLabeledEdit
+        Tag = 2
+        Left = 3
+        Top = 96
+        Width = 503
+        Height = 21
+        EditLabel.Width = 46
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Descri'#231#227'o'
+        MaxLength = 30
+        TabOrder = 0
+      end
+      object edtCategoriaId: TLabeledEdit
+        Tag = 1
+        Left = 3
+        Top = 40
+        Width = 121
+        Height = 21
+        EditLabel.Width = 33
+        EditLabel.Height = 13
+        EditLabel.Caption = 'C'#243'digo'
+        MaxLength = 10
+        NumbersOnly = True
+        TabOrder = 1
+      end
+      object edtCep: TMaskEdit
+        Left = 512
+        Top = 96
+        Width = 145
+        Height = 21
+        EditMask = '99.999-999;1;_'
+        MaxLength = 10
+        TabOrder = 2
+        Text = '  .   -   '
+      end
+      object edtEndereco: TLabeledEdit
+        Tag = 2
+        Left = 3
+        Top = 144
+        Width = 451
+        Height = 21
+        EditLabel.Width = 45
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Endere'#231'o'
+        MaxLength = 30
+        TabOrder = 3
+      end
+      object edtBairro: TLabeledEdit
+        Tag = 2
+        Left = 460
+        Top = 144
+        Width = 198
+        Height = 21
+        EditLabel.Width = 28
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Bairro'
+        MaxLength = 30
+        TabOrder = 4
+      end
+      object edtCidade: TLabeledEdit
+        Tag = 2
+        Left = 3
+        Top = 192
+        Width = 451
+        Height = 21
+        EditLabel.Width = 33
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Cidade'
+        MaxLength = 30
+        TabOrder = 5
+      end
+      object edtTelefone: TMaskEdit
+        Left = 460
+        Top = 192
+        Width = 196
+        Height = 21
+        EditMask = '!\(99\)00000-0000;1;_'
+        MaxLength = 14
+        TabOrder = 6
+        Text = '(  )     -    '
+      end
+      object edtEmail: TLabeledEdit
+        Tag = 2
+        Left = 3
+        Top = 240
+        Width = 451
+        Height = 21
+        EditLabel.Width = 28
+        EditLabel.Height = 13
+        EditLabel.Caption = 'E-mail'
+        MaxLength = 30
+        TabOrder = 7
+      end
+    end
+  end
+  inherited pnlRodape: TPanel
+    Width = 669
+    inherited btnFechar: TBitBtn
+      Left = 589
+    end
+    inherited btnNavegator: TDBNavigator
+      Hints.Strings = ()
+    end
+  end
+end
