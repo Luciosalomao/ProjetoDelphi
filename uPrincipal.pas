@@ -24,6 +24,9 @@ type
     Produto2: TMenuItem;
     N4: TMenuItem;
     Vendapordata1: TMenuItem;
+    Categoria2: TMenuItem;
+    FichadoCliente1: TMenuItem;
+    ProdutoporCategoria1: TMenuItem;
     procedure mnuFecharClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Categoria1Click(Sender: TObject);
@@ -31,6 +34,12 @@ type
     procedure Cliente1Click(Sender: TObject);
     procedure Produto1Click(Sender: TObject);
     procedure Venda1Click(Sender: TObject);
+    procedure Categoria2Click(Sender: TObject);
+    procedure Cliente2Click(Sender: TObject);
+    procedure FichadoCliente1Click(Sender: TObject);
+    procedure Produto2Click(Sender: TObject);
+    procedure ProdutoporCategoria1Click(Sender: TObject);
+    procedure Vendapordata1Click(Sender: TObject);
   private
     { Private declarations }
     TeclaEnter: TMREnter;
@@ -46,7 +55,9 @@ implementation
 
 {$R *.dfm}
 
-uses uCadCategorias, uTelaDeCliente, uTelaDeProduto, uProVendas;
+uses uCadCategorias, uTelaDeCliente, uTelaDeProduto, uProVendas, uRelCategoria,
+  uRelCadCliente, uRelCadClienteFicha, uRelCadProduto, uRelProdutoCategoria,
+  uSelecionarData, uRelVendaPorData;
 
 procedure TfrmPrincipal.Categoria1Click(Sender: TObject);
 begin
@@ -55,11 +66,32 @@ begin
   frmCadCategoria.release;  {Destroi o componente}
 end;
 
+procedure TfrmPrincipal.Categoria2Click(Sender: TObject);
+begin
+   frmRelCategoria:=TfrmRelCategoria.create(Self);
+   frmRelCategoria.Relatorio.PreviewModal;
+   frmRelCategoria.Release;
+end;
+
 procedure TfrmPrincipal.Cliente1Click(Sender: TObject);
 begin
   frmTelaDeCliente:=TfrmTelaDeCliente.create(self);
   frmTelaDeCliente.showModal;
   frmTelaDeCliente.release;
+end;
+
+procedure TfrmPrincipal.Cliente2Click(Sender: TObject);
+begin
+  frmRelCadCliente:=TfrmRelCadCliente.create(self);
+  frmRelCadCliente.Relatorio.PreviewModal;
+  frmRelCadCliente.Release;
+end;
+
+procedure TfrmPrincipal.FichadoCliente1Click(Sender: TObject);
+begin
+  frmRelCadClienteFicha:=TfrmRelCadClienteFicha.create(self);
+  frmRelCadClienteFicha.Relatorio.PreviewModal;
+  frmRelCadClienteFicha.Release;
 end;
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -117,12 +149,45 @@ begin
   frmTelaProdutos.release;
 end;
 
+procedure TfrmPrincipal.Produto2Click(Sender: TObject);
+begin
+   frmRelCadProduto:=TfrmRelCadProduto.create(Self);
+   frmRelCadProduto.Relatorio.PreviewModal;
+   frmRelCadProduto.Release;
+end;
+
+procedure TfrmPrincipal.ProdutoporCategoria1Click(Sender: TObject);
+begin
+   frmRelProdutoCategoria:=TfrmRelProdutoCategoria.create(Self);
+   frmRelProdutoCategoria.Relatorio.PreviewModal;
+   frmRelProdutoCategoria.Release;
+end;
+
 procedure TfrmPrincipal.Venda1Click(Sender: TObject);
 begin
   //crtl + F9 para adicionar as uses
   frmProVendas:=TfrmProVendas.create(self);
   frmProVendas.showModal;
   frmProVendas.release;
+end;
+
+procedure TfrmPrincipal.Vendapordata1Click(Sender: TObject);
+begin
+   try
+     frmSelecionarData := TfrmSelecionarData.Create(Self);
+     frmSelecionarData.ShowModal;
+
+     frmRelVendaPorData := TfrmRelVendaPorData.Create(Self);
+     frmRelVendaPorData.qryVenda.Close;
+     frmRelVendaPorData.qryVenda.ParamByName('DataInicio').AsDate:=frmSelecionarData.edtDataInicio.Date;
+     frmRelVendaPorData.qryVenda.ParamByName('DataFinal').AsDate:=frmSelecionarData.edtDataFinal.Date;
+     frmRelVendaPorData.qryVenda.Open;
+     frmRelVendaPorData.Relatorio.PreviewModal;
+   finally
+     frmSelecionarData.Release;
+     frmRelVendaPorData.Release;
+   end;
+
 end;
 
 procedure TfrmPrincipal.AtualizacaoBancoDados(aForm: TfrmAtualizaDB);
