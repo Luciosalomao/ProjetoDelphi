@@ -25,7 +25,15 @@ uses
   uRelProdutoCategoria in 'uRelProdutoCategoria.pas' {frmRelProdutoCategoria},
   uSelecionarData in 'Relatorios\uSelecionarData.pas' {frmSelecionarData},
   uRelVendaPorData in 'Relatorios\uRelVendaPorData.pas' {frmRelVendaPorData},
-  uRelProVenda in 'Relatorios\uRelProVenda.pas' {frmRelProVenda};
+  uRelProVenda in 'Relatorios\uRelProVenda.pas' {frmRelProVenda},
+  uFuncaoCriptografia in 'Heranca\uFuncaoCriptografia.pas',
+  uTelaUsuarios in 'uTelaUsuarios.pas' {frmTelaUsuarios},
+  cUsuario in 'Classes\cUsuario.pas',
+  uLogin in 'Login\uLogin.pas' {frmLogin},
+  uAlterarSenha in 'Login\uAlterarSenha.pas' {frmMudarSenha},
+  cUsuarioLogado in 'Classes\cUsuarioLogado.pas',
+  cAtualizacaoBancoDeDados in 'Classes\cAtualizacaoBancoDeDados.pas',
+  cAtualizacaoTabelaMSSQL in 'Classes\cAtualizacaoTabelaMSSQL.pas';
 
 {$R *.res}
 

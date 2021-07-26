@@ -104,11 +104,14 @@ function TCliente.Apagar: boolean;
        qry.SQL.Add('Delete from clientes where ' +
                    'clienteId = :ClienteId');
        qry.ParamByName('ClienteId').AsInteger:=F_ClienteId;
-     try
-       qry.ExecSQL;
-     Except
-       Result:=False;
-     end;
+        try
+           conexaoDB.StartTransaction;
+           qry.ExecSQL;
+           conexaoDB.Commit;
+        Except
+           conexaoDB.Rollback;
+           Result:=False;
+        end;
      finally
        if Assigned(qry) then
        FreeAndNil(qry);
@@ -144,12 +147,14 @@ begin
      qry.ParamByName('telefone').AsString           :=Self.F_telefone;
      qry.ParamByName('email').AsString              :=Self.F_email;
      qry.ParamByName('datadenascimento').AsDateTime :=Self.F_datadenascimento;
-
-     try
-       qry.ExecSQL;
-     Except
-       Result:=False;
-     end;
+      try
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
+      Except
+         conexaoDB.Rollback;
+         Result:=False;
+      end;
      finally
      if Assigned(qry) then
      FreeAndNil(qry);
@@ -232,11 +237,15 @@ begin
      qry.ParamByName('email').AsString              := Self.F_email;
      qry.ParamByName('datadenascimento').AsDateTime := Self.F_datadenascimento;
 
-     try
-       qry.ExecSQL;
-     Except
-       Result:=False;
-     end;
+      try
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
+      Except
+         conexaoDB.Rollback;
+         Result:=False;
+      end;
+
      finally
      if Assigned(qry) then
      FreeAndNil(qry);

@@ -67,12 +67,14 @@ begin
                  ' where produtoId = :produtoId ');
      qry.ParamByName('produtoId').AsInteger := produtoId;
      qry.ParamByName('qtdeBaixa').AsFloat := quantidade;
-     try
-        qry.ExecSQL;
-     except
-        Result := false;
-     end;
-
+      try
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
+      Except
+         conexaoDB.Rollback;
+         Result:=False;
+      end;
    finally
         if Assigned(qry) then
           FreeAndNil(qry);
@@ -96,11 +98,14 @@ begin
 
      qry.ParamByName('produtoId').AsInteger := produtoId;
      qry.ParamByName('qtdeBaixa').AsFloat:= quantidade;
-     try
-        qry.ExecSQL;
-     except
-        Result := false;
-     end;
+      try
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
+      Except
+         conexaoDB.Rollback;
+         Result:=False;
+      end;
 
      finally
         if Assigned(qry) then

@@ -3,8 +3,23 @@ unit uPrincipal;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, uDM, Enter, ufrmAtualizaDB;
+  Winapi.Windows,
+  Winapi.Messages,
+  System.SysUtils,
+  System.Variants,
+  System.Classes,
+  Vcl.Graphics,
+  Vcl.Controls,
+  Vcl.Forms,
+  Vcl.Dialogs,
+  Vcl.Menus,
+  uDM,
+  Enter,
+  ufrmAtualizaDB,
+  Vcl.ComCtrls,
+  cUsuarioLogado,
+  ZDbcIntfs,
+  cAtualizacaoBancoDeDados;
 
 type
   TfrmPrincipal = class(TForm)
@@ -27,6 +42,10 @@ type
     Categoria2: TMenuItem;
     FichadoCliente1: TMenuItem;
     ProdutoporCategoria1: TMenuItem;
+    Usurio1: TMenuItem;
+    N5: TMenuItem;
+    AlterarSenha1: TMenuItem;
+    stbPrincipal: TStatusBar;
     procedure mnuFecharClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Categoria1Click(Sender: TObject);
@@ -40,6 +59,9 @@ type
     procedure Produto2Click(Sender: TObject);
     procedure ProdutoporCategoria1Click(Sender: TObject);
     procedure Vendapordata1Click(Sender: TObject);
+    procedure Usurio1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure AlterarSenha1Click(Sender: TObject);
   private
     { Private declarations }
     TeclaEnter: TMREnter;
@@ -50,6 +72,7 @@ type
 
 var
   frmPrincipal: TfrmPrincipal;
+  oUsuarioLogado : TUsuarioLogado;
 
 implementation
 
@@ -57,7 +80,7 @@ implementation
 
 uses uCadCategorias, uTelaDeCliente, uTelaDeProduto, uProVendas, uRelCategoria,
   uRelCadCliente, uRelCadClienteFicha, uRelCadProduto, uRelProdutoCategoria,
-  uSelecionarData, uRelVendaPorData;
+  uSelecionarData, uRelVendaPorData, uTelaUsuarios, uLogin, uAlterarSenha;
 
 procedure TfrmPrincipal.Categoria1Click(Sender: TObject);
 begin
@@ -99,6 +122,9 @@ begin
   {Destruindo os componentes}
   FreeAndNil(dmConexao);
   FreeAndNil(TeclaEnter);
+
+  if Assigned(oUsuarioLogado) then
+      FreeAndNil(oUsuarioLogado);
 end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
@@ -107,18 +133,10 @@ begin
   frmAtualizaDB.Show;
   frmAtualizaDB.Refresh;
 
-  dmConexao:= TdmConexao.Create(Self);     //cria o formulario
- { dmConexao.conexaoDB.SQLHourGlass:=true;  //muda a ampulheta
-  dmConexao.conexaoDB.Protocol:='mssql';
-  dmConexao.conexaoDB.LibraryLocation:='C:\ProjetoDelphi\ntwdblib.dll';
-  dmConexao.conexaoDB.HostName:='localhost\SQL2017EL';
-  dmConexao.conexaoDB.Port:=1433;
-  dmConexao.conexaoDB.User:='sa';
-  dmConexao.conexaoDB.Password:='cidadao';
-  dmconexao.conexaoDB.Database:='Vendas';
-  dmConexao.conexaoDB.Connected:=true;   //cria o banco  }
+  dmConexao:= TdmConexao.Create(Self);
 
   with dmConexao.conexaoDB do begin    //O with é usado para evitar repetição de código
+    Connected:=False;
     SQLHourGlass:=true;  //muda a ampulheta
     Protocol:='mssql';
     LibraryLocation:='C:\ProjetoDelphi\ntwdblib.dll';
@@ -126,7 +144,9 @@ begin
     Port:=1433;
     User:='sa';
     Password:='cidadao';
-    Database:='Vendas';
+    Database:='vendasII';  //'Vendas';
+    AutoCommit:=true;
+    TransactIsolationLevel:=tiReadCommitted;
     Connected:=true;   //cria o banco
   end;
   AtualizacaoBancoDados(frmAtualizaDB);
@@ -135,6 +155,19 @@ begin
   TeclaEnter:= TMREnter.Create(Self);
   TeclaEnter.FocusEnabled:=true;
   TeclaEnter.FocusColor:=clInfoBk;
+end;
+
+procedure TfrmPrincipal.FormShow(Sender: TObject);
+begin
+   try
+      oUsuarioLogado := TUsuarioLogado.Create;
+      frmLogin:= TfrmLogin.Create(Self);
+      frmLogin.ShowModal;
+   finally
+       frmLogin.Release;
+       stbPrincipal.Panels[0].Text:='USUÁRIO: ' + oUsuarioLogado.nome;
+   end;
+
 end;
 
 procedure TfrmPrincipal.mnuFecharClick(Sender: TObject);
@@ -161,6 +194,13 @@ begin
    frmRelProdutoCategoria:=TfrmRelProdutoCategoria.create(Self);
    frmRelProdutoCategoria.Relatorio.PreviewModal;
    frmRelProdutoCategoria.Release;
+end;
+
+procedure TfrmPrincipal.Usurio1Click(Sender: TObject);
+begin
+  frmTelaUsuarios:=TfrmTelaUsuarios.create(self);
+  frmTelaUsuarios.showModal;
+  frmTelaUsuarios.release;
 end;
 
 procedure TfrmPrincipal.Venda1Click(Sender: TObject);
@@ -190,31 +230,30 @@ begin
 
 end;
 
-procedure TfrmPrincipal.AtualizacaoBancoDados(aForm: TfrmAtualizaDB);
+procedure TfrmPrincipal.AlterarSenha1Click(Sender: TObject);
 begin
-    aForm.chkConexao.checked := true;
+   frmMudarSenha:= TfrmMudarSenha.Create(Self);
+   frmMudarSenha.ShowModal;
+   frmMudarSenha.Release;
+end;
+
+procedure TfrmPrincipal.AtualizacaoBancoDados(aForm: TfrmAtualizaDB);
+var
+    oAtualizarMSSQL: TAtualizaBancoDeDadosMSSQL;
+//Atualiza o banco de dados
+begin
+
     aForm.refresh;
 
-    dmConexao.qryScriptCategorias.ExecSQL;
-    aForm.chkCategorias.Checked := true;
-    aForm.refresh;
-    sleep(250);
-    dmConexao.qryScriptProdutos.ExecSQL;
-    aForm.chkProdutos.Checked := true;
-    aForm.refresh;
-    sleep(250);
-    dmConexao.qryScriptClientes.ExecSQL;
-    aForm.chkClientes.Checked := true;
-    aForm.refresh;
-    sleep(250);
-    dmConexao.qryScriptVendas.ExecSQL;
-    aForm.chkVendas.Checked := true;
-    aForm.refresh;
-    sleep(250);
-    dmConexao.qryScriptVendasItens.ExecSQL;
-    aForm.chkVendasItens.Checked := true;
-    aForm.refresh;
-    sleep(250);
+    try
+       oAtualizarMSSQL := TAtualizaBancoDeDadosMSSQL.Create(dmConexao.conexaoDB);
+       oAtualizarMSSQL.AtualizarBancoDeDadosMSSQL;
+
+    finally
+       if Assigned(oAtualizarMSSQL) then
+          FreeAndNil(oAtualizarMSSQL);
+    end;
+
 end;
 
 end.

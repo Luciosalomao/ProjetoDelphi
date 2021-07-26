@@ -170,6 +170,23 @@
             <Form>frmRelProVenda</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Heranca\uFuncaoCriptografia.pas"/>
+        <DCCReference Include="uTelaUsuarios.pas">
+            <Form>frmTelaUsuarios</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\cUsuario.pas"/>
+        <DCCReference Include="Login\uLogin.pas">
+            <Form>frmLogin</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Login\uAlterarSenha.pas">
+            <Form>frmMudarSenha</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\cUsuarioLogado.pas"/>
+        <DCCReference Include="Classes\cAtualizacaoBancoDeDados.pas"/>
+        <DCCReference Include="Classes\cAtualizacaoTabelaMSSQL.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

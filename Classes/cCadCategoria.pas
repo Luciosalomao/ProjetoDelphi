@@ -92,11 +92,14 @@ implementation
        qry.SQL.Add('Delete from categorias where ' +
                    'categoriaId = :categoriaId');
        qry.ParamByName('categoriaId').AsInteger:=F_categoriaId;
-     try
-       qry.ExecSQL;
-     Except
-       Result:=False;
-     end
+        try
+           conexaoDB.StartTransaction;
+           qry.ExecSQL;
+           conexaoDB.Commit;
+        Except
+           conexaoDB.Rollback;
+           Result:=False;
+        end;
      finally
        if Assigned(qry) then
        FreeAndNil(qry);
@@ -116,11 +119,14 @@ implementation
      qry.SQL.Add('Update categorias set descricao=:descricao where categoriaId=:categoriaId');
      qry.ParamByName('categoriaId').AsInteger:=Self.F_categoriaid;
      qry.ParamByName('descricao').AsString:=Self.F_descricao;
-     try
-       qry.ExecSQL;
-     Except
-       Result:=False;
-     end;
+      try
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
+      Except
+         conexaoDB.Rollback;
+         Result:=False;
+      end;
      finally
      if Assigned(qry) then  //Verifica se o objeto existe na memória
      FreeAndNil(qry);    //Apaga a memória
@@ -139,9 +145,12 @@ implementation
       qry.SQL.Add('Insert into categorias (descricao) values (:descricao)');
       qry.ParamByName('descricao').AsString:=Self.F_descricao; //O valor de F_descricao chega atraves do método Set
       try
-        qry.ExecSQL;
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
       Except
-        Result:=False;
+         conexaoDB.Rollback;
+         Result:=False;
       end;
     finally
       if Assigned(qry) then  //Verifica se o objeto existe na memória
