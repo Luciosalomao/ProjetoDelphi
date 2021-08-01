@@ -7,7 +7,8 @@ uses
   System.Classes, Vcl.Graphics, System.UITypes, Vcl.Controls, Vcl.Forms,
   Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Data.DB,   Vcl.Grids, Vcl.DBGrids,
   Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, Vcl.DBCtrls, ZAbstractRODataset,
-  ZAbstractDataset, ZDataset, uDM, uEnum, RxToolEdit, RxCurrEdit;
+  ZAbstractDataset, ZDataset, uDM, uEnum, RxToolEdit, RxCurrEdit,
+  ZAbstractConnection, ZConnection;
 
 type
   TfrmTelaHeranca = class(TForm)
@@ -43,8 +44,10 @@ type
     procedure grdListagemDblClick(Sender: TObject);
     procedure grdListagemKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnPesquisarClick(Sender: TObject);
   private
     { Private declarations }
+    SelectOriginal : String;
     procedure ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar,
         btnApagar: TBitBtn; btnNavegator: TDBNavigator; pgcPrincipal: TPageControl; Flag:Boolean);
     procedure ControlarIndiceTab(pgcPrincipal: TPageControl; indice: Integer);
@@ -60,6 +63,7 @@ type
     function Excluir:Boolean; virtual; //método virtual
     function Gravar(EstadoDoCadastro: TEstadoDoCadastro): boolean; virtual;
     procedure BloqueiaCTRL_DEL_DBGrid(var key: Word; Shift: TShiftState);
+    class function TenhoAcesso(aUsuarioId: integer; aChave: string; aConexao: TZConnection): boolean; static;
   end;
 
 var
@@ -68,6 +72,14 @@ var
 implementation
 
 {$R *.dfm}
+
+uses uPrincipal;
+
+Function DataIng(Data:String):String;
+begin
+  {converte data de dd/mm/yyyy para mm/dd/yyyy}
+  Result := Copy(Data,4,3) + Copy(Data,1,3) + Copy(Data,7,4);
+end;
 
 {$region 'Observações'}
 //Tag = 1 - Chave primária
@@ -113,6 +125,36 @@ Begin
       End;
    end;
 End;
+
+class function TfrmTelaHeranca.TenhoAcesso(aUsuarioId: integer; aChave: string;
+  aConexao: TZConnection): boolean;
+
+var qry: TZQuery;
+
+begin
+   try
+      Result := true;
+      qry := TZQuery.Create(nil);
+      qry.Connection := aConexao;
+      qry.SQL.Clear;
+      qry.SQL.Add('SELECT usuarioId ' +
+                  ' FROM usuariosAcaoAcesso '+
+                  ' WHERE usuarioId =:usuarioId ' +
+                  ' AND acaoAcessoId = (SELECT TOP 1 acaoAcessoId FROM acaoAcesso WHERE chave=:chave) '+
+                  ' AND ativo=1');
+      qry.ParamByName('usuarioId').AsInteger   :=aUsuarioId;
+      qry.ParamByName('chave').AsString        :=aChave;
+
+      qry.Open;
+
+      if qry.IsEmpty then
+          Result:=false
+   finally
+      if Assigned(qry) then
+          FreeAndNil(qry);
+   end;
+
+end;
 
 function TfrmTelaHeranca.ExisteCampoObrigatorio: boolean;
 var i: integer;
@@ -194,22 +236,125 @@ end;
 
 procedure TfrmTelaHeranca.btnNovoClick(Sender: TObject);
 begin
-  ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar,
+
+   if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   begin
+      MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
+      Abort;
+   end;
+
+   ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar,
    btnNavegator, pgcPrincipal, false);
    EstadoDoCadastro:=ecInserir;
    LimparEdits;
 end;
 
 
+procedure TfrmTelaHeranca.btnPesquisarClick(Sender: TObject);
+var i: integer;
+     TipoCampo:TFieldType;
+     NomeCampo: String;
+     WhereOrAnd: String;
+     CondicaoSQL: String;
+     strData: string;
+begin
+ if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   begin
+      MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
+      Abort;
+   end;
+
+   if mskPesquisar.Text='' then
+   begin
+     qryListagem.Close;
+     qryListagem.SQL.Clear;
+     qryListagem.SQL.Add(SelectOriginal);
+     qryListagem.Open;
+     Abort;
+   end;
+
+   for i := 0 to qryListagem.FieldCount-1 do
+   begin
+     if qryListagem.Fields[i].FieldName=IndiceAtual then
+       begin
+          TipoCampo := qryListagem.Fields[i].DataType;
+          if qryListagem.Fields[i].Origin<>'' then
+            begin
+              if pos('.', qryListagem.Fields[i].Origin) > 0 then
+                 NomeCampo := qryListagem.Fields[i].Origin
+              else
+                  NomeCampo:=qryListagem.Fields[i].Origin+'.'+qryListagem.Fields[i].FieldName
+            end
+            else
+            NomeCampo:=qryListagem.Fields[i].FieldName;
+            Break;
+       end;
+
+   end;
+
+
+   if Pos('where', LowerCase(SelectOriginal)) > 1 then
+   begin
+     WhereOrAnd := ' and ';
+   end
+   else
+   begin
+      WhereOrAnd := ' where ';
+   end;
+
+   if (TipoCampo = ftString) or (TipoCampo = ftWideString) then
+      begin
+        CondicaoSQL := WhereOrAnd + ' ' + NomeCampo + ' LIKE ' + QuotedStr('%'+ mskPesquisar.Text + '%')
+      end
+      else if (TipoCampo = ftInteger) or (TipoCampo = ftSmallint)then
+      begin
+        CondicaoSQL :=  WhereOrAnd + ' ' + NomeCampo + '=' + DataIng(mskPesquisar.Text)
+      end
+      else if (TipoCampo = ftDate) or (TipoCampo = ftDateTime)then
+      begin
+        strData:=DataIng(mskPesquisar.Text);
+        CondicaoSQL :=  WhereOrAnd + ' ' + NomeCampo + '=' + QuotedStr(strData);
+      end
+      else if (TipoCampo = ftFloat) or (TipoCampo = ftCurrency)then
+      begin
+         CondicaoSQL :=  WhereOrAnd + ' ' + NomeCampo + '=' +
+         StringReplace(mskPesquisar.Text,',','.',[rfReplaceAll]);
+      end;
+
+        qryListagem.close;
+        qryListagem.SQL.Clear;
+        qryListagem.SQL.Add(SelectOriginal);
+        qryListagem.SQL.Add(CondicaoSQL);
+        qryListagem.Open;
+
+
+        mskPesquisar.Text:='';
+        mskPesquisar.SetFocus;
+end;
+
 procedure TfrmTelaHeranca.btnAlterarClick(Sender: TObject);
 begin
-  ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar,
+
+   if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   begin
+      MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
+      Abort;
+   end;
+
+   ControlarBotoes(btnNovo, btnAlterar, btnCancelar, btnGravar, btnApagar,
    btnNavegator, pgcPrincipal, false);
    EstadoDoCadastro:=ecAlterar;
 end;
 
 procedure TfrmTelaHeranca.btnApagarClick(Sender: TObject);
 begin
+
+if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   begin
+      MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
+      Abort;
+   end;
+
 try
    if Excluir then
    begin
@@ -243,6 +388,13 @@ end;
 
 procedure TfrmTelaHeranca.btnGravarClick(Sender: TObject);
 begin
+
+   if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   begin
+      MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
+      Abort;
+   end;
+
    if (ExisteCampoObrigatorio) then
      Abort;
    Try
@@ -288,6 +440,7 @@ begin
     ControlarIndiceTab(pgcPrincipal, 0);    //Muda o Tab
     qryListagem.IndexFieldNames:=indiceAtual;
     ExibeIndiceLabel(indiceAtual, lblIndice);
+    SelectOriginal := qryListagem.SQL.Text;
     qryListagem.Open;
   end;
   DesabilitarEditPK;

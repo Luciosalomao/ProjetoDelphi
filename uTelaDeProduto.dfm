@@ -9,12 +9,9 @@ inherited frmTelaProdutos: TfrmTelaProdutos
   inherited pgcPrincipal: TPageControl
     Width = 836
     Height = 427
-    ActivePage = TabManutencao
     ExplicitWidth = 836
     ExplicitHeight = 427
     inherited TabListagem: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 828
       ExplicitHeight = 399
       inherited pnlListagemTopo: TPanel
@@ -53,8 +50,6 @@ inherited frmTelaProdutos: TfrmTelaProdutos
       end
     end
     inherited TabManutencao: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 828
       ExplicitHeight = 399
       object lblDescricao: TLabel
@@ -173,33 +168,40 @@ inherited frmTelaProdutos: TfrmTelaProdutos
     object qryListagemprodutoId: TIntegerField
       DisplayLabel = 'C'#243'digo'
       FieldName = 'produtoId'
+      Origin = 'p'
       ReadOnly = True
     end
     object qryListagemnome: TWideStringField
       DisplayLabel = 'Nome'
       FieldName = 'nome'
+      Origin = 'p'
       Size = 60
     end
     object qryListagemdescricao: TWideStringField
       DisplayLabel = 'Descri'#231#227'o'
       FieldName = 'descricao'
+      Origin = 'p'
       Size = 255
     end
     object qryListagemvalor: TFloatField
       DisplayLabel = 'Valor'
       FieldName = 'valor'
+      Origin = 'p'
     end
     object qryListagemquantidade: TFloatField
       DisplayLabel = 'Quantidade'
       FieldName = 'quantidade'
+      Origin = 'p'
     end
     object qryListagemcategoriaId: TIntegerField
       DisplayLabel = 'C'#243'd. Categoria'
       FieldName = 'categoriaId'
+      Origin = 'p'
     end
     object qryListagemDescricaoCategoria: TWideStringField
       DisplayLabel = 'Descri'#231#227'o da  Categoria'
       FieldName = 'DescricaoCategoria'
+      Origin = 'c.descricao'
       Size = 30
     end
   end

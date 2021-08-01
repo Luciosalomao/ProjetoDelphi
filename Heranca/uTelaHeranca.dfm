@@ -43,17 +43,18 @@ object frmTelaHeranca: TfrmTelaHeranca
           Caption = 'Campo Pesquisar'
         end
         object btnPesquisar: TBitBtn
+          Tag = 99
           Left = 348
           Top = 26
           Width = 75
           Height = 25
           Caption = '&Pesquisar'
           TabOrder = 0
-          Visible = False
+          OnClick = btnPesquisarClick
         end
         object mskPesquisar: TMaskEdit
-          Left = 5
-          Top = 28
+          Left = 7
+          Top = 26
           Width = 321
           Height = 21
           TabOrder = 1
@@ -96,6 +97,7 @@ object frmTelaHeranca: TfrmTelaHeranca
       696
       41)
     object btnNovo: TBitBtn
+      Tag = 99
       Left = 11
       Top = 6
       Width = 75
@@ -132,6 +134,7 @@ object frmTelaHeranca: TfrmTelaHeranca
       OnClick = btnNovoClick
     end
     object btnAlterar: TBitBtn
+      Tag = 99
       Left = 92
       Top = 6
       Width = 75
@@ -204,6 +207,7 @@ object frmTelaHeranca: TfrmTelaHeranca
       OnClick = btnCancelarClick
     end
     object btnGravar: TBitBtn
+      Tag = 99
       Left = 254
       Top = 6
       Width = 75
@@ -240,6 +244,7 @@ object frmTelaHeranca: TfrmTelaHeranca
       OnClick = btnGravarClick
     end
     object btnApagar: TBitBtn
+      Tag = 99
       Left = 335
       Top = 6
       Width = 75
@@ -276,8 +281,8 @@ object frmTelaHeranca: TfrmTelaHeranca
       OnClick = btnApagarClick
     end
     object btnFechar: TBitBtn
-      Left = 616
-      Top = 7
+      Left = 617
+      Top = 6
       Width = 75
       Height = 25
       Anchors = [akTop, akRight]

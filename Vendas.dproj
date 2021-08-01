@@ -187,6 +187,22 @@
         <DCCReference Include="Classes\cUsuarioLogado.pas"/>
         <DCCReference Include="Classes\cAtualizacaoBancoDeDados.pas"/>
         <DCCReference Include="Classes\cAtualizacaoTabelaMSSQL.pas"/>
+        <DCCReference Include="Classes\cAtualizacaoCampoMSSQL.pas"/>
+        <DCCReference Include="Classes\cArquivoIni.pas"/>
+        <DCCReference Include="Classes\cAcaoAcesso.pas"/>
+        <DCCReference Include="Classes\uAcaoAcesso.pas">
+            <Form>frmCadAcaoAcesso</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Login\uUsuarioVsAcoes.pas">
+            <Form>frmUsuarioVsAcoes</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="udtmGrafico.pas">
+            <Form>dtmGrafico</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

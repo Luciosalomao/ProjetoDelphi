@@ -33,7 +33,13 @@ uses
   uAlterarSenha in 'Login\uAlterarSenha.pas' {frmMudarSenha},
   cUsuarioLogado in 'Classes\cUsuarioLogado.pas',
   cAtualizacaoBancoDeDados in 'Classes\cAtualizacaoBancoDeDados.pas',
-  cAtualizacaoTabelaMSSQL in 'Classes\cAtualizacaoTabelaMSSQL.pas';
+  cAtualizacaoTabelaMSSQL in 'Classes\cAtualizacaoTabelaMSSQL.pas',
+  cAtualizacaoCampoMSSQL in 'Classes\cAtualizacaoCampoMSSQL.pas',
+  cArquivoIni in 'Classes\cArquivoIni.pas',
+  cAcaoAcesso in 'Classes\cAcaoAcesso.pas',
+  uAcaoAcesso in 'Classes\uAcaoAcesso.pas' {frmCadAcaoAcesso},
+  uUsuarioVsAcoes in 'Login\uUsuarioVsAcoes.pas' {frmUsuarioVsAcoes},
+  udtmGrafico in 'udtmGrafico.pas' {dtmGrafico: TDataModule};
 
 {$R *.res}
 

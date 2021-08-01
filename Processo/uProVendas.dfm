@@ -9,12 +9,9 @@ inherited frmProVendas: TfrmProVendas
   inherited pgcPrincipal: TPageControl
     Width = 875
     Height = 403
-    ActivePage = TabManutencao
     ExplicitWidth = 875
     ExplicitHeight = 403
     inherited TabListagem: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 867
       ExplicitHeight = 375
       inherited pnlListagemTopo: TPanel
@@ -58,8 +55,6 @@ inherited frmProVendas: TfrmProVendas
       end
     end
     inherited TabManutencao: TTabSheet
-      ExplicitLeft = 4
-      ExplicitTop = 24
       ExplicitWidth = 867
       ExplicitHeight = 375
       object lblCliente: TLabel
@@ -396,26 +391,31 @@ inherited frmProVendas: TfrmProVendas
     object qryListagemvendaId: TIntegerField
       DisplayLabel = 'C'#243'd. Venda'
       FieldName = 'vendaId'
+      Origin = 'vendas'
       ReadOnly = True
     end
     object qryListagemclienteId: TIntegerField
       DisplayLabel = 'C'#243'd. Cliente'
       FieldName = 'clienteId'
+      Origin = 'vendas'
       Required = True
     end
     object qryListagemnome: TWideStringField
       DisplayLabel = 'Nome do Cliente'
       FieldName = 'nome'
+      Origin = 'clientes'
       Size = 60
     end
     object qryListagemdataVenda: TDateTimeField
       DisplayLabel = 'Data da Venda'
       FieldName = 'dataVenda'
+      Origin = 'vendas'
       Required = True
     end
     object qryListagemtotalVenda: TFloatField
       DisplayLabel = 'Total da Venda'
       FieldName = 'totalVenda'
+      Origin = 'vendas'
       Required = True
     end
   end

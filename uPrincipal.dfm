@@ -2,8 +2,8 @@ object frmPrincipal: TfrmPrincipal
   Left = 0
   Top = 0
   Caption = 'Menu Principal'
-  ClientHeight = 449
-  ClientWidth = 762
+  ClientHeight = 539
+  ClientWidth = 828
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,21 +21,44 @@ object frmPrincipal: TfrmPrincipal
   TextHeight = 13
   object stbPrincipal: TStatusBar
     Left = 0
-    Top = 430
-    Width = 762
+    Top = 520
+    Width = 828
     Height = 19
     Panels = <
       item
         Width = 150
       end>
   end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 828
+    Height = 33
+    Align = alTop
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 8
+      Top = 4
+      Width = 114
+      Height = 25
+      Caption = 'Dashboard'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -21
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = Label1Click
+    end
+  end
   object MainMenu1: TMainMenu
-    Left = 648
-    Top = 144
+    Left = 432
+    Top = 40
     object Cadastro1: TMenuItem
       Caption = 'Cadastro'
       object Cliente1: TMenuItem
         Caption = 'Cliente'
+        ShortCut = 16451
         OnClick = Cliente1Click
       end
       object N1: TMenuItem
@@ -43,10 +66,12 @@ object frmPrincipal: TfrmPrincipal
       end
       object Categoria1: TMenuItem
         Caption = 'Categoria'
+        ShortCut = 16468
         OnClick = Categoria1Click
       end
       object Produto1: TMenuItem
         Caption = 'Produto'
+        ShortCut = 16464
         OnClick = Produto1Click
       end
       object N2: TMenuItem
@@ -54,13 +79,29 @@ object frmPrincipal: TfrmPrincipal
       end
       object Usurio1: TMenuItem
         Caption = 'Usu'#225'rio'
+        ShortCut = 16469
         OnClick = Usurio1Click
+      end
+      object AoAcesso1: TMenuItem
+        Caption = 'A'#231#227'o Acesso'
+        ShortCut = 16449
+        OnClick = AoAcesso1Click
+      end
+      object N5: TMenuItem
+        Caption = '-'
+      end
+      object UsuriosVsAes1: TMenuItem
+        Caption = 'Usu'#225'rios Vs A'#231#245'es'
+        OnClick = UsuriosVsAes1Click
+      end
+      object N6: TMenuItem
+        Caption = '-'
       end
       object AlterarSenha1: TMenuItem
         Caption = 'Alterar Senha'
         OnClick = AlterarSenha1Click
       end
-      object N5: TMenuItem
+      object N7: TMenuItem
         Caption = '-'
       end
       object mnuFechar: TMenuItem
@@ -72,6 +113,7 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Movimenta'#231#227'o'
       object Venda1: TMenuItem
         Caption = 'Venda'
+        ShortCut = 120
         OnClick = Venda1Click
       end
     end

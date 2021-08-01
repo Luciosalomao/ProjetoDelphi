@@ -19,7 +19,11 @@ uses
   Vcl.ComCtrls,
   cUsuarioLogado,
   ZDbcIntfs,
-  cAtualizacaoBancoDeDados;
+  cAtualizacaoBancoDeDados,
+  Vcl.StdCtrls,
+  cArquivoIni,
+  RLReport, Vcl.ExtCtrls, Data.DB, ZAbstractRODataset, ZAbstractDataset,
+  ZDataset;
 
 type
   TfrmPrincipal = class(TForm)
@@ -46,6 +50,12 @@ type
     N5: TMenuItem;
     AlterarSenha1: TMenuItem;
     stbPrincipal: TStatusBar;
+    AoAcesso1: TMenuItem;
+    N6: TMenuItem;
+    UsuriosVsAes1: TMenuItem;
+    N7: TMenuItem;
+    Panel1: TPanel;
+    Label1: TLabel;
     procedure mnuFecharClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Categoria1Click(Sender: TObject);
@@ -62,10 +72,16 @@ type
     procedure Usurio1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure AlterarSenha1Click(Sender: TObject);
+    procedure AoAcesso1Click(Sender: TObject);
+    procedure UsuriosVsAes1Click(Sender: TObject);
+    procedure Label1Click(Sender: TObject);
   private
     { Private declarations }
     TeclaEnter: TMREnter;
-    procedure AtualizacaoBancoDados(aForm: TfrmAtualizaDB); //Código que troca o tab pelo enter e muda a cor - componente de terceiro
+    procedure AtualizacaoBancoDados(aForm: TfrmAtualizaDB);
+    procedure CriarForm(aNomeForm: TFormClass);
+    procedure CriarRelatorio(aNomeForm: TFormClass);
+    procedure AtualizarDashbord; //Código que troca o tab pelo enter e muda a cor - componente de terceiro
   public
     { Public declarations }
   end;
@@ -80,41 +96,32 @@ implementation
 
 uses uCadCategorias, uTelaDeCliente, uTelaDeProduto, uProVendas, uRelCategoria,
   uRelCadCliente, uRelCadClienteFicha, uRelCadProduto, uRelProdutoCategoria,
-  uSelecionarData, uRelVendaPorData, uTelaUsuarios, uLogin, uAlterarSenha;
+  uSelecionarData, uRelVendaPorData, uTelaUsuarios, uLogin, uAlterarSenha,
+  uAcaoAcesso, cAcaoAcesso, uUsuarioVsAcoes, udtmGrafico, uTelaHeranca;
 
 procedure TfrmPrincipal.Categoria1Click(Sender: TObject);
 begin
-  frmCadCategoria:=TfrmCadCategoria.create(self);
-  frmCadCategoria.showModal;
-  frmCadCategoria.release;  {Destroi o componente}
+   CriarForm(TfrmCadCategoria);
 end;
 
 procedure TfrmPrincipal.Categoria2Click(Sender: TObject);
 begin
-   frmRelCategoria:=TfrmRelCategoria.create(Self);
-   frmRelCategoria.Relatorio.PreviewModal;
-   frmRelCategoria.Release;
+   CriarRelatorio(TfrmRelCategoria);
 end;
 
 procedure TfrmPrincipal.Cliente1Click(Sender: TObject);
 begin
-  frmTelaDeCliente:=TfrmTelaDeCliente.create(self);
-  frmTelaDeCliente.showModal;
-  frmTelaDeCliente.release;
+  CriarForm(TfrmTelaDeCliente);
 end;
 
 procedure TfrmPrincipal.Cliente2Click(Sender: TObject);
 begin
-  frmRelCadCliente:=TfrmRelCadCliente.create(self);
-  frmRelCadCliente.Relatorio.PreviewModal;
-  frmRelCadCliente.Release;
+  CriarRelatorio(TfrmRelCadCliente);
 end;
 
 procedure TfrmPrincipal.FichadoCliente1Click(Sender: TObject);
 begin
-  frmRelCadClienteFicha:=TfrmRelCadClienteFicha.create(self);
-  frmRelCadClienteFicha.Relatorio.PreviewModal;
-  frmRelCadClienteFicha.Release;
+   CriarRelatorio(TfrmRelCadClienteFicha);
 end;
 
 procedure TfrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -122,6 +129,7 @@ begin
   {Destruindo os componentes}
   FreeAndNil(dmConexao);
   FreeAndNil(TeclaEnter);
+  FreeAndNil(dtmGrafico);
 
   if Assigned(oUsuarioLogado) then
       FreeAndNil(oUsuarioLogado);
@@ -129,32 +137,73 @@ end;
 
 procedure TfrmPrincipal.FormCreate(Sender: TObject);
 begin
-  frmAtualizaDB := TfrmAtualizaDB.create(Self);  {Cria o form de atualização}
-  frmAtualizaDB.Show;
-  frmAtualizaDB.Refresh;
 
-  dmConexao:= TdmConexao.Create(Self);
+   if not FileExists(TArquivoIni.ArquivoIni) then
+   begin
+      TArquivoIni.AtualizarIni('SERVER', 'TipoDataBase', 'MSSQL');
+      TArquivoIni.AtualizarIni('SERVER', 'HostName', '.\');
+      TArquivoIni.AtualizarIni('SERVER', 'Port', '1433');
+      TArquivoIni.AtualizarIni('SERVER', 'User', 'sa');
+      TArquivoIni.AtualizarIni('SERVER', 'Password', 'mudar@123');
+      TArquivoIni.AtualizarIni('SERVER', 'Database', 'vendas');
 
-  with dmConexao.conexaoDB do begin    //O with é usado para evitar repetição de código
-    Connected:=False;
-    SQLHourGlass:=true;  //muda a ampulheta
-    Protocol:='mssql';
-    LibraryLocation:='C:\ProjetoDelphi\ntwdblib.dll';
-    HostName:='localhost\SQL2017EL';
-    Port:=1433;
-    User:='sa';
-    Password:='cidadao';
-    Database:='vendasII';  //'Vendas';
-    AutoCommit:=true;
-    TransactIsolationLevel:=tiReadCommitted;
-    Connected:=true;   //cria o banco
-  end;
-  AtualizacaoBancoDados(frmAtualizaDB);
-  frmAtualizaDB.Free;  {destroi o form de atualização}
+      MessageDlg('Arquivo '+ TArquivoIni.ArquivoIni + ' Criado com sucesso. ' +#13+
+                 'Configure o arquivo antes de inicializar aplicação', MtInformation, [mbOK],0);
 
-  TeclaEnter:= TMREnter.Create(Self);
-  TeclaEnter.FocusEnabled:=true;
-  TeclaEnter.FocusColor:=clInfoBk;
+      Application.Terminate;
+   end
+   else
+   begin
+      frmAtualizaDB := TfrmAtualizaDB.create(Self);  {Cria o form de atualização}
+      frmAtualizaDB.Show;
+      frmAtualizaDB.Refresh;
+
+      dmConexao:= TdmConexao.Create(Self);
+
+      with dmConexao.conexaoDB do begin    //O with é usado para evitar repetição de código
+        Connected:=False;
+        SQLHourGlass:=true;  //muda a ampulheta
+        LibraryLocation:='C:\ProjetoDelphi\ntwdblib.dll';
+        if TArquivoIni.LerIni('SERVER', 'TipoDataBase')='MSSQL' then
+        Protocol:='mssql';
+        HostName:=TArquivoIni.LerIni('SERVER', 'HostName');
+        Port:=StrToInt(TArquivoIni.LerIni('SERVER', 'Port'));
+        User:=TArquivoIni.LerIni('SERVER', 'User');
+        Password:=TArquivoIni.LerIni('SERVER', 'Password');
+        Database:=TArquivoIni.LerIni('SERVER', 'Database');
+        AutoCommit:=true;
+        TransactIsolationLevel:=tiReadCommitted;
+        Connected:=true;   //cria o banco
+      end;
+      AtualizacaoBancoDados(frmAtualizaDB);
+
+      TAcaoAcesso.CriarAcoes(TfrmCadCategoria, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmTelaDeCliente, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmTelaProdutos, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmTelaUsuarios, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmCadAcaoAcesso, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmMudarSenha, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmProVendas, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmRelVendaPorData, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmRelCadClienteFicha, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmRelCadCliente, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmRelProdutoCategoria, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmRelCadProduto, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmRelCategoria, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmUsuarioVsAcoes, dmConexao.conexaoDB);
+      TAcaoAcesso.CriarAcoes(TfrmSelecionarData, dmConexao.conexaoDB);
+
+      TAcaoAcesso.PreencherUsuariosVsAcoes(dmConexao.conexaoDB);
+
+      dtmGrafico := TdtmGrafico.Create(Self);
+      AtualizarDashbord;
+
+      frmAtualizaDB.Free;  {destroi o form de atualização}
+
+      TeclaEnter:= TMREnter.Create(Self);
+      TeclaEnter.FocusEnabled:=true;
+      TeclaEnter.FocusColor:=clInfoBk;
+   end;
 end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);
@@ -170,6 +219,11 @@ begin
 
 end;
 
+procedure TfrmPrincipal.Label1Click(Sender: TObject);
+begin
+   AtualizarDashbord;
+end;
+
 procedure TfrmPrincipal.mnuFecharClick(Sender: TObject);
 begin
 Application.Terminate;
@@ -177,64 +231,71 @@ end;
 
 procedure TfrmPrincipal.Produto1Click(Sender: TObject);
 begin
-  frmTelaProdutos:=TfrmTelaProdutos.create(self);
-  frmTelaProdutos.showModal;
-  frmTelaProdutos.release;
+  CriarForm(TfrmTelaProdutos);
 end;
 
 procedure TfrmPrincipal.Produto2Click(Sender: TObject);
 begin
-   frmRelCadProduto:=TfrmRelCadProduto.create(Self);
-   frmRelCadProduto.Relatorio.PreviewModal;
-   frmRelCadProduto.Release;
+   CriarRelatorio(TfrmRelCadProduto);
 end;
 
 procedure TfrmPrincipal.ProdutoporCategoria1Click(Sender: TObject);
 begin
-   frmRelProdutoCategoria:=TfrmRelProdutoCategoria.create(Self);
-   frmRelProdutoCategoria.Relatorio.PreviewModal;
-   frmRelProdutoCategoria.Release;
+   CriarRelatorio(TfrmRelProdutoCategoria);
 end;
 
 procedure TfrmPrincipal.Usurio1Click(Sender: TObject);
 begin
-  frmTelaUsuarios:=TfrmTelaUsuarios.create(self);
-  frmTelaUsuarios.showModal;
-  frmTelaUsuarios.release;
+    CriarForm(TfrmTelaUsuarios);
+end;
+
+procedure TfrmPrincipal.UsuriosVsAes1Click(Sender: TObject);
+begin
+   CriarForm(TfrmUsuarioVsAcoes);
 end;
 
 procedure TfrmPrincipal.Venda1Click(Sender: TObject);
 begin
   //crtl + F9 para adicionar as uses
-  frmProVendas:=TfrmProVendas.create(self);
-  frmProVendas.showModal;
-  frmProVendas.release;
+    CriarForm(TfrmProVendas);
 end;
 
 procedure TfrmPrincipal.Vendapordata1Click(Sender: TObject);
 begin
    try
      frmSelecionarData := TfrmSelecionarData.Create(Self);
-     frmSelecionarData.ShowModal;
+     if TfrmTelaHeranca.TenhoAcesso(oUsuarioLogado.codigo, frmSelecionarData.Name, dmConexao.conexaoDB) then
+     begin
+       frmSelecionarData.ShowModal;
 
-     frmRelVendaPorData := TfrmRelVendaPorData.Create(Self);
-     frmRelVendaPorData.qryVenda.Close;
-     frmRelVendaPorData.qryVenda.ParamByName('DataInicio').AsDate:=frmSelecionarData.edtDataInicio.Date;
-     frmRelVendaPorData.qryVenda.ParamByName('DataFinal').AsDate:=frmSelecionarData.edtDataFinal.Date;
-     frmRelVendaPorData.qryVenda.Open;
-     frmRelVendaPorData.Relatorio.PreviewModal;
+       frmRelVendaPorData := TfrmRelVendaPorData.Create(Self);
+       frmRelVendaPorData.qryVenda.Close;
+       frmRelVendaPorData.qryVenda.ParamByName('DataInicio').AsDate:=frmSelecionarData.edtDataInicio.Date;
+       frmRelVendaPorData.qryVenda.ParamByName('DataFinal').AsDate:=frmSelecionarData.edtDataFinal.Date;
+       frmRelVendaPorData.qryVenda.Open;
+       frmRelVendaPorData.Relatorio.PreviewModal;
+     end
+     else
+     begin
+       MessageDlg('Usuário: '+oUsuarioLogado.nome +' Não tem permissão', mtWarning, [mbOK],0);
+     end;
    finally
-     frmSelecionarData.Release;
-     frmRelVendaPorData.Release;
+     if Assigned(frmSelecionarData) then
+        frmSelecionarData.Release;
+     if Assigned(frmRelVendaPorData) then
+        frmRelVendaPorData.Release;
    end;
 
 end;
 
 procedure TfrmPrincipal.AlterarSenha1Click(Sender: TObject);
 begin
-   frmMudarSenha:= TfrmMudarSenha.Create(Self);
-   frmMudarSenha.ShowModal;
-   frmMudarSenha.Release;
+   CriarForm(TfrmMudarSenha);
+end;
+
+procedure TfrmPrincipal.AoAcesso1Click(Sender: TObject);
+begin
+   CriarForm(TfrmCadAcaoAcesso);
 end;
 
 procedure TfrmPrincipal.AtualizacaoBancoDados(aForm: TfrmAtualizaDB);
@@ -254,6 +315,86 @@ begin
           FreeAndNil(oAtualizarMSSQL);
     end;
 
+end;
+
+procedure TfrmPrincipal.CriarForm(aNomeForm: TFormClass);
+var form: TForm;
+begin
+
+   if (oUsuarioLogado.codigo <= 0)  or (oUsuarioLogado.nome = EmptyStr) or (oUsuarioLogado.senha=EmptyStr)then
+   exit;
+
+   try
+
+     form := aNomeForm.Create(Application);
+     if TfrmTelaHeranca.TenhoAcesso(oUsuarioLogado.codigo, form.Name, dmConexao.conexaoDB) then
+     begin
+        form.ShowModal;
+     end
+     else
+     begin
+        MessageDlg('Usuário: '+oUsuarioLogado.nome +' Não tem permissão', mtWarning, [mbOK],0)
+     end;
+   finally
+     if Assigned(form) then
+        form.Release;
+        AtualizarDashbord;
+
+   end;
+end;
+
+procedure TfrmPrincipal.CriarRelatorio(aNomeForm: TFormClass);
+var form: TForm;
+    aRelatorio: TRLReport;
+    i: Integer;
+
+begin
+   try
+
+     form := aNomeForm.Create(Application);
+     if TfrmTelaHeranca.TenhoAcesso(oUsuarioLogado.codigo, form.Name, dmConexao.conexaoDB) then
+       begin
+       for i := 0 to form.ComponentCount - 1 do
+         begin
+            TRLReport(form.Components[i]).previewModal;
+            break;
+         end;
+       end
+     else
+     begin
+        MessageDlg('Usuário: '+oUsuarioLogado.nome +' Não tem permissão', mtWarning, [mbOK],0);
+     end;
+   finally
+     if Assigned(form) then
+        form.Release;
+
+   end;
+end;
+
+procedure TfrmPrincipal.AtualizarDashbord;
+begin
+
+  try
+    screen.Cursor:=crSQLWait;
+    if (dtmGrafico.qryProdutoEstoque.Active) then
+        dtmGrafico.qryProdutoEstoque.Close;
+
+    if (dtmGrafico.qryVendaValorPorCliente.Active) then
+        dtmGrafico.qryVendaValorPorCliente.Close;
+
+    if (dtmGrafico.qryVendasMaiores.Active) then
+        dtmGrafico.qryVendasMaiores.Close;
+
+    if (dtmGrafico.qryVendasUltimaSemana.Active) then
+        dtmGrafico.qryVendasUltimaSemana.Close;
+
+        dtmGrafico.qryProdutoEstoque.open;
+        dtmGrafico.qryVendaValorPorCliente.open;
+        dtmGrafico.qryVendasMaiores.open;
+        dtmGrafico.qryVendasUltimaSemana.open;
+  finally
+     screen.Cursor:=crDefault;
+  end;
 end;
 
 end.

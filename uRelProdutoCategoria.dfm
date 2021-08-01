@@ -1,7 +1,7 @@
 object frmRelProdutoCategoria: TfrmRelProdutoCategoria
   Left = 0
   Top = 0
-  Caption = 'frmRelProdutoCategoria'
+  Caption = 'Relat'#243'rio de Produto por Categoria'
   ClientHeight = 596
   ClientWidth = 822
   Color = clBtnFace

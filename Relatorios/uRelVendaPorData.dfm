@@ -1,7 +1,7 @@
 object frmRelVendaPorData: TfrmRelVendaPorData
   Left = 0
   Top = 0
-  Caption = 'frmRelVendaPorData'
+  Caption = 'Relat'#243'rio de Venda por Data'
   ClientHeight = 572
   ClientWidth = 849
   Color = clBtnFace
