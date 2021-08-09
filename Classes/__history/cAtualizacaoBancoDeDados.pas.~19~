@@ -1,0 +1,89 @@
+unit cAtualizacaoBancoDeDados;
+
+interface
+
+uses
+    System.Classes,
+    Vcl.Controls,
+    Vcl.Dialogs,
+    ExtCtrls,
+    ZAbstractConnection,
+    ZConnection,
+    ZAbstractRODataset,
+    ZAbstractDataset,
+    System.SysUtils,
+    ZDataset; //Lista de units
+
+type
+   TAtualizaBancoDeDados = class
+
+private
+   conexaoDB: TZConnection;
+public
+   constructor Create(aConexao: TZConnection);
+   procedure ExecutaDiretoBancoDeDados(aScript: String);
+end;
+
+type
+   TAtualizaBancoDeDadosMSSQL = class
+
+private
+   conexaoDB: TZConnection;
+public
+   function AtualizaBancoDeDadosMSSQL: Boolean;
+   constructor Create(aConexao: TZConnection);
+end;
+
+implementation
+
+{ TAtualizaBancoDeDados }
+
+constructor TAtualizaBancoDeDados.Create(aConexao: TZConnection);
+begin
+    conexaoDB:=aConexao;
+end;
+
+procedure TAtualizaBancoDeDados.ExecutaDiretoBancoDeDados(aScript: String);
+var qry:TZQuery;
+begin
+    try
+      qry:=TZQuery.Create(nil);
+      qry.Connection:=conexaoDB;
+      qry.SQL.Clear;
+      qry.SQL.Add(aScript);
+      try
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
+      except
+         conexaoDB.Rollback;
+      end;
+    finally
+       qry.Close;
+       if Assigned(qry) then
+          FreeAndNil(qry);
+    end;
+end;
+
+{ TAtualizaBancoDeDadosMSSQL }
+
+function TAtualizaBancoDeDadosMSSQL.AtualizaBancoDeDadosMSSQL: Boolean;
+var
+   OAtualizaDB: TAtualizaBancoDeDados;
+begin
+   try
+       //Classe principal de atualização
+       OAtualizaDB := TAtualizaBancoDeDados.Create(conexaoDB);
+   finally
+       if Assigned(OAtualizaDB) then
+          FreeAndNil(OAtualizaDB);
+   end;
+
+end;
+
+constructor TAtualizaBancoDeDadosMSSQL.Create(aConexao: TZConnection);
+begin
+   conexaoDB:=aConexao;
+end;
+
+end.

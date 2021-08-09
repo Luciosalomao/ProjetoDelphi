@@ -1,0 +1,101 @@
+unit cAtualizacaoBancoDeDados;
+
+interface
+
+uses
+    System.Classes,
+    Vcl.Controls,
+    Vcl.Dialogs,
+    ExtCtrls,
+    ZAbstractConnection,
+    ZConnection,
+    ZAbstractRODataset,
+    ZAbstractDataset,
+    System.SysUtils,
+    ZDataset; //Lista de units
+
+type
+   TAtualizaBancoDeDados = class
+
+private
+
+public
+   conexaoDB: TZConnection;
+   constructor Create(aConexao: TZConnection);
+   procedure ExecutaDiretoBancoDeDados(aScript: String);
+end;
+
+type
+   TAtualizaBancoDeDadosMSSQL = class
+
+private
+   conexaoDB: TZConnection;
+public
+   function AtualizarBancoDeDadosMSSQL: Boolean;
+   constructor Create(aConexao: TZConnection);
+end;
+
+implementation
+
+uses cAtualizacaoTabelaMSSQL;
+
+{ TAtualizaBancoDeDados }
+
+
+constructor TAtualizaBancoDeDados.Create(aConexao: TZConnection);
+begin
+    conexaoDB:=aConexao;
+end;
+
+procedure TAtualizaBancoDeDados.ExecutaDiretoBancoDeDados(aScript: String);
+var qry:TZQuery;
+begin
+    try
+      qry:=TZQuery.Create(nil);
+      qry.Connection:=conexaoDB;
+      qry.SQL.Clear;
+      qry.SQL.Add(aScript);
+      try
+         conexaoDB.StartTransaction;
+         qry.ExecSQL;
+         conexaoDB.Commit;
+      except
+         conexaoDB.Rollback;
+      end;
+    finally
+       qry.Close;
+       if Assigned(qry) then
+          FreeAndNil(qry);
+    end;
+end;
+
+{ TAtualizaBancoDeDadosMSSQL }
+
+function TAtualizaBancoDeDadosMSSQL.AtualizarBancoDeDadosMSSQL: Boolean;
+var
+   OAtualizaDB: TAtualizaBancoDeDados;
+   oTabela: TAtualizacaoTabelaMSSQL;
+begin
+   try
+       //Classe principal de atualização
+       OAtualizaDB := TAtualizaBancoDeDados.Create(conexaoDB);
+
+       //Classe filha
+       oTabela := TAtualizacaoTabelaMSSQL.Create(conexaoDB);
+
+   finally
+       if Assigned(OAtualizaDB) then
+          FreeAndNil(OAtualizaDB);
+
+       if Assigned(oTabela) then
+          FreeAndNil(oTabela);
+   end;
+
+end;
+
+constructor TAtualizaBancoDeDadosMSSQL.Create(aConexao: TZConnection);
+begin
+   conexaoDB:=aConexao;
+end;
+
+end.

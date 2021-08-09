@@ -1,0 +1,25 @@
+unit uFuncaoCriptografia;
+
+interface
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus;
+
+implementation
+
+function Criptografar(const aEntrada: string): string;
+  var i, iQtdeEnt, iIntervalo: Integer;
+  sSaida: String;
+  sProximoCaracter: String;
+begin
+  iIntervalo:=6;
+  i         :=0;
+  iQtdeEnt  :=0;
+
+  if (aEntrada <> EmptyStr) then
+  begin
+
+  end;
+end;
+
+end.

@@ -1,0 +1,55 @@
+unit cArquivoIni;
+
+interface
+
+uses
+  System.Classes,
+  Vcl.Controls,
+  Vcl.ExtCtrls,
+  Vcl.Dialogs,
+  System.SysUtils,
+  System.IniFiles,
+  Vcl.Forms;
+
+
+type
+   TArquivoIni = class
+
+   private
+
+   public
+      class function ArquivoIni : string; static;
+      class function LerIni(aSecao : string; aEntrada : string) : string; static;
+      class procedure AtualizarIni(aSecao, aEntrada, aValor : string); static;
+
+end;
+
+
+implementation
+
+{ TArquivoIni }
+
+class function TArquivoIni.ArquivoIni: string;
+begin
+   result := ChangeFileExt( Application.ExeName, '.INI' ); //pega o nome do executável e coloca a extensão ini
+end;
+
+class procedure TArquivoIni.AtualizarIni(aSecao, aEntrada, aValor: string);
+begin
+
+end;
+
+class function TArquivoIni.LerIni(aSecao, aEntrada: string): string;
+var
+   ini: TIniFile;
+begin
+   try
+     ini := TIniFile.Create(ArquivoIni);
+     result := ini.ReadString( aSecao, aEntrada, 'Não Encontrado' );
+   finally
+     ini.Free;
+   end;
+
+end;
+
+end.

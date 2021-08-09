@@ -1,0 +1,180 @@
+object frmUsuarioVsAcoes: TfrmUsuarioVsAcoes
+  Left = 0
+  Top = 0
+  Caption = 'Usu'#225'rio Vs A'#231#245'es'
+  ClientHeight = 482
+  ClientWidth = 849
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Splitter1: TSplitter
+    Left = 249
+    Top = 0
+    Height = 434
+    ExplicitLeft = 232
+    ExplicitTop = 136
+    ExplicitHeight = 100
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 249
+    Height = 434
+    Align = alLeft
+    TabOrder = 0
+    object grdUsuarios: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 247
+      Height = 432
+      Align = alClient
+      DataSource = dtsUsuario
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'usuarioId'
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'nome'
+          Width = 178
+          Visible = True
+        end>
+    end
+  end
+  object Panel2: TPanel
+    Left = 252
+    Top = 0
+    Width = 597
+    Height = 434
+    Align = alClient
+    TabOrder = 1
+    object grdAcoes: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 595
+      Height = 432
+      Align = alClient
+      DataSource = dtsUsuariosAcaoAcess
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+      TabOrder = 0
+      TitleFont.Charset = DEFAULT_CHARSET
+      TitleFont.Color = clWindowText
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnDrawColumnCell = grdAcoesDrawColumnCell
+      OnDblClick = grdAcoesDblClick
+    end
+  end
+  object Panel3: TPanel
+    Left = 0
+    Top = 434
+    Width = 849
+    Height = 48
+    Align = alBottom
+    TabOrder = 2
+  end
+  object qryUsuario: TZQuery
+    Connection = dmConexao.conexaoDB
+    AfterScroll = qryUsuarioAfterScroll
+    CachedUpdates = True
+    Active = True
+    SQL.Strings = (
+      'Select usuarioId,'
+      '           nome'
+      'from usuarios')
+    Params = <>
+    Left = 132
+    Top = 80
+    object qryUsuariousuarioId: TIntegerField
+      DisplayLabel = 'C'#243'digo'
+      DisplayWidth = 7
+      FieldName = 'usuarioId'
+      ReadOnly = True
+    end
+    object qryUsuarionome: TWideStringField
+      DisplayLabel = 'Nome'
+      DisplayWidth = 50
+      FieldName = 'nome'
+      Required = True
+      Size = 50
+    end
+  end
+  object qryUsuariosAcaoAcess: TZQuery
+    Connection = dmConexao.conexaoDB
+    Active = True
+    SQL.Strings = (
+      'Select ua.usuarioId,'
+      '           ua.acaoAcessoId,'
+      '           a.descricao,'
+      '          ua.ativo'
+      'from usuariosAcaoAcesso as ua'
+      'Inner Join acaoAcesso As a On a.acaoAcessoId  =  ua.acaoAcessoId'
+      'Where  ua.usuarioId=:usuarioId')
+    Params = <
+      item
+        DataType = ftWideString
+        Name = 'usuarioId'
+        ParamType = ptUnknown
+        Value = '1'
+      end>
+    Left = 372
+    Top = 104
+    ParamData = <
+      item
+        DataType = ftWideString
+        Name = 'usuarioId'
+        ParamType = ptUnknown
+        Value = '1'
+      end>
+    object qryUsuariosAcaoAcessdescricao: TWideStringField
+      DisplayLabel = 'Descri'#231#227'o'
+      DisplayWidth = 100
+      FieldName = 'descricao'
+      Required = True
+      Size = 100
+    end
+    object qryUsuariosAcaoAcessusuarioId: TIntegerField
+      FieldName = 'usuarioId'
+      Required = True
+      Visible = False
+    end
+    object qryUsuariosAcaoAcessacaoAcessoId: TIntegerField
+      FieldName = 'acaoAcessoId'
+      Required = True
+      Visible = False
+    end
+    object qryUsuariosAcaoAcessativo: TBooleanField
+      FieldName = 'ativo'
+      Required = True
+      Visible = False
+    end
+  end
+  object dtsUsuario: TDataSource
+    DataSet = qryUsuario
+    Left = 128
+    Top = 160
+  end
+  object dtsUsuariosAcaoAcess: TDataSource
+    DataSet = qryUsuariosAcaoAcess
+    Left = 396
+    Top = 160
+  end
+end

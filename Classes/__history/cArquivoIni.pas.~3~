@@ -1,0 +1,16 @@
+unit cArquivoIni;
+
+interface
+
+uses
+  System.Classes,
+  Vcl.Controls,
+  Vcl.ExtCtrls,
+  Vcl.Dialogs,
+  System.SysUtils,
+  System.IniFiles,
+  Vcl.Forms;
+
+implementation
+
+end.

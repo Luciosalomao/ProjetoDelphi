@@ -1,0 +1,65 @@
+unit uLogin;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons;
+
+type
+  TfrmLogin = class(TForm)
+    lblUsuario: TLabel;
+    lblSenha: TLabel;
+    edtUsuario: TEdit;
+    edtSenha: TEdit;
+    btnFechar: TBitBtn;
+    btnOK: TBitBtn;
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure btnFecharClick(Sender: TObject);
+    procedure btnOKClick(Sender: TObject);
+  private
+    { Private declarations }
+    bFechar: Boolean;
+    procedure FecharAplicacao;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLogin: TfrmLogin;
+
+implementation
+
+uses cUsuario;
+
+{$R *.dfm}
+
+procedure TfrmLogin.btnFecharClick(Sender: TObject);
+begin
+  FecharAplicacao;  //Termina a aplicação
+end;
+
+procedure TfrmLogin.btnOKClick(Sender: TObject);
+begin
+   bFechar:=true;
+   close;     //Fecha o login
+end;
+
+procedure TfrmLogin.FecharAplicacao;
+begin
+  bFechar := true;
+  Application.Terminate;
+end;
+
+procedure TfrmLogin.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+   CanClose:=bFechar;
+end;
+
+procedure TfrmLogin.FormShow(Sender: TObject);
+begin
+   bFechar:=false;
+end;
+
+end.

@@ -1,0 +1,23 @@
+unit cUsuarioLogado;
+
+interface
+
+implementation
+uses
+   System.Classes,
+   Vcl.Controls,
+   Vcl.Dialogs,
+   ExtCtrls,
+   ZAbstractConnection,
+   ZConnection,
+   ZAbstractRODataset,
+   ZAbstractDataset,
+   System.SysUtils,
+   ZDataset;
+
+ Type
+    TProduto = class
+ private
+    conexaoDB: TZConnection;
+ end;
+end.
