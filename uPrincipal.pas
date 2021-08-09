@@ -23,7 +23,8 @@ uses
   Vcl.StdCtrls,
   cArquivoIni,
   RLReport, Vcl.ExtCtrls, Data.DB, ZAbstractRODataset, ZAbstractDataset,
-  ZDataset;
+  ZDataset, VclTee.TeeGDIPlus, VCLTee.TeEngine, VCLTee.TeeProcs, VCLTee.Chart,
+  VCLTee.Series, VCLTee.DBChart;
 
 type
   TfrmPrincipal = class(TForm)
@@ -56,6 +57,24 @@ type
     N7: TMenuItem;
     Panel1: TPanel;
     Label1: TLabel;
+    pnGraficos: TPanel;
+    Panel2: TPanel;
+    Splitter1: TSplitter;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
+    Splitter2: TSplitter;
+    Splitter3: TSplitter;
+    Panel6: TPanel;
+    Panel7: TPanel;
+    DBChart1: TDBChart;
+    Series1: TBarSeries;
+    DBChart2: TDBChart;
+    Series2: TPieSeries;
+    DBChart3: TDBChart;
+    PieSeries1: TPieSeries;
+    DBChart4: TDBChart;
+    Series3: TFastLineSeries;
     procedure mnuFecharClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Categoria1Click(Sender: TObject);
@@ -204,6 +223,9 @@ begin
       TeclaEnter.FocusEnabled:=true;
       TeclaEnter.FocusColor:=clInfoBk;
    end;
+
+
+
 end;
 
 procedure TfrmPrincipal.FormShow(Sender: TObject);

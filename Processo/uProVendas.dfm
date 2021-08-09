@@ -9,9 +9,13 @@ inherited frmProVendas: TfrmProVendas
   inherited pgcPrincipal: TPageControl
     Width = 875
     Height = 403
+    ActivePage = TabManutencao
+    ExplicitTop = -32
     ExplicitWidth = 875
     ExplicitHeight = 403
     inherited TabListagem: TTabSheet
+      ExplicitLeft = 4
+      ExplicitTop = 24
       ExplicitWidth = 867
       ExplicitHeight = 375
       inherited pnlListagemTopo: TPanel
@@ -55,6 +59,8 @@ inherited frmProVendas: TfrmProVendas
       end
     end
     inherited TabManutencao: TTabSheet
+      ExplicitLeft = 4
+      ExplicitTop = 24
       ExplicitWidth = 867
       ExplicitHeight = 375
       object lblCliente: TLabel
@@ -387,7 +393,7 @@ inherited frmProVendas: TfrmProVendas
       #9'   vendas.totalVenda'
       'FROM vendas'
       'INNER JOIN clientes ON clientes.clienteId = vendas.clienteId')
-    Left = 780
+    Left = 604
     object qryListagemvendaId: TIntegerField
       DisplayLabel = 'C'#243'd. Venda'
       FieldName = 'vendaId'
