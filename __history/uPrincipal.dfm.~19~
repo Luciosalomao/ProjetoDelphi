@@ -164,7 +164,7 @@ object frmPrincipal: TfrmPrincipal
           DefaultCanvas = 'TGDIPlusCanvas'
           ColorPaletteIndex = 13
           object Series3: TFastLineSeries
-            DataSource = dtmGrafico.qryVendasUltimaSemana
+            DataSource = dtmGrafico.qryVendasMaiores
             Title = 'Vendas da '#218'ltima Semana'
             XLabelsSource = 'Label'
             LinePen.Color = 10708548

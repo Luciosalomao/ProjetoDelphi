@@ -255,9 +255,8 @@ end;
 procedure TfrmPrincipal.pnGraficosResize(Sender: TObject);
 begin
    //Redimensionando Dashbord
-   pnlEsquerdo.Width:=pnGraficos.Width div 2;
-   pnlEsquerdoSup.Height:=pnGraficos.Height div 2;
-   pnlDireitoSup.Height:=pnGraficos.Height div 2;
+
+
 end;
 
 procedure TfrmPrincipal.Produto1Click(Sender: TObject);

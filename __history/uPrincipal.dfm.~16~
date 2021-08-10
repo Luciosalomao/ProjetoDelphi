@@ -90,7 +90,7 @@ object frmPrincipal: TfrmPrincipal
         ExplicitTop = 201
         ExplicitWidth = 283
       end
-      object pnlEsquerdoSup: TPanel
+      object Panel4: TPanel
         Left = 1
         Top = 1
         Width = 406
@@ -143,7 +143,7 @@ object frmPrincipal: TfrmPrincipal
           end
         end
       end
-      object pnlEsquerdoInf: TPanel
+      object Panel6: TPanel
         Left = 1
         Top = 252
         Width = 406
@@ -177,7 +177,7 @@ object frmPrincipal: TfrmPrincipal
         end
       end
     end
-    object pnlDireito: TPanel
+    object Panel3: TPanel
       Left = 412
       Top = 1
       Width = 533
@@ -196,7 +196,7 @@ object frmPrincipal: TfrmPrincipal
         ExplicitTop = 201
         ExplicitWidth = 283
       end
-      object pnlDireitoSup: TPanel
+      object Panel5: TPanel
         Left = 1
         Top = 1
         Width = 531
@@ -274,7 +274,7 @@ object frmPrincipal: TfrmPrincipal
           end
         end
       end
-      object pnlDireitoInf: TPanel
+      object Panel7: TPanel
         Left = 1
         Top = 252
         Width = 531
