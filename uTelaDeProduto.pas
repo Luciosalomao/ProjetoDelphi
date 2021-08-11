@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB,
   ZAbstractRODataset, ZAbstractDataset, ZDataset, Vcl.DBCtrls, Vcl.Grids,
   Vcl.DBGrids, Vcl.StdCtrls, Vcl.Mask, Vcl.Buttons, Vcl.ExtCtrls, Vcl.ComCtrls,
-  RxToolEdit, RxCurrEdit, cCadProduto, uEnum, uDM;
+  RxToolEdit, RxCurrEdit, cCadProduto, uEnum, uDM, uCadCategorias;
 
 type
   TfrmTelaProdutos = class(TfrmTelaHeranca)
@@ -32,11 +32,14 @@ type
     dsCategoria: TDataSource;
     qryCategoriacategoriaId: TIntegerField;
     qryCategoriadescricao: TWideStringField;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
     procedure btnAlterarClick(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     { Private declarations }
     oProduto: TProduto;
@@ -50,6 +53,8 @@ var
   frmTelaProdutos: TfrmTelaProdutos;
 
 implementation
+
+uses uPrincipal;
 
 {$R *.dfm}
 
@@ -132,6 +137,13 @@ begin
    else if (EstadoDoCadastro = ecAlterar) then
      Result := oProduto.Atualizar;
 
+end;
+
+procedure TfrmTelaProdutos.SpeedButton1Click(Sender: TObject);
+begin
+  inherited;
+
+  qryCategoria.Refresh;
 end;
 
 end.

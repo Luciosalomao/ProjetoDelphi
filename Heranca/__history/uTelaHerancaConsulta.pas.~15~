@@ -1,0 +1,80 @@
+unit uTelaHerancaConsulta;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.Mask,
+  Data.DB, ZAbstractRODataset, ZAbstractDataset, ZDataset, Vcl.Grids,
+  Vcl.DBGrids, Vcl.Buttons;
+
+type
+  TfrmTelaHerancaConsulta = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    mskPesquisa: TMaskEdit;
+    lblIndice: TLabel;
+    grdPesquisa: TDBGrid;
+    qryListagem: TZQuery;
+    dsListagem: TDataSource;
+    btnFechar: TBitBtn;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnFecharClick(Sender: TObject);
+    procedure grdPesquisaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    function RetornarCampoTraduzido(Campo: String): String;
+    { Private declarations }
+  public
+    { Public declarations }
+    aRetornarIdSelecionado: Variant;
+    aIniciarPesquisaId: Variant;
+    aCampoId: String;
+    IndiceAtual: String;
+  end;
+
+var
+  frmTelaHerancaConsulta: TfrmTelaHerancaConsulta;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmTelaHerancaConsulta.btnFecharClick(Sender: TObject);
+begin
+   close;
+end;
+
+procedure TfrmTelaHerancaConsulta.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+   if qryListagem.Active then
+      qryListagem.Close;
+end;
+
+procedure TfrmTelaHerancaConsulta.FormCreate(Sender: TObject);
+begin
+   if qryListagem.Active then
+      qryListagem.Close;
+
+      qryListagem.Open;
+end;
+
+procedure TfrmTelaHerancaConsulta.grdPesquisaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+     //Bloqueia o CTRL + DEL
+  if (Shift = [ssCtrl]) and (Key = 46) then
+      key := 0;
+end;
+
+function TfrmTelaHerancaConsulta.RetornarCampoTraduzido(Campo: String):String;
+var
+   i: integer;
+begin
+
+end;
+
+end.

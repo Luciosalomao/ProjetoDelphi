@@ -39,7 +39,9 @@ uses
   cAcaoAcesso in 'Classes\cAcaoAcesso.pas',
   uAcaoAcesso in 'Classes\uAcaoAcesso.pas' {frmCadAcaoAcesso},
   uUsuarioVsAcoes in 'Login\uUsuarioVsAcoes.pas' {frmUsuarioVsAcoes},
-  udtmGrafico in 'udtmGrafico.pas' {dtmGrafico: TDataModule};
+  udtmGrafico in 'udtmGrafico.pas' {dtmGrafico: TDataModule},
+  uTelaHerancaConsulta in 'Heranca\uTelaHerancaConsulta.pas' {frmTelaHerancaConsulta},
+  uConCategoria in 'Consulta\uConCategoria.pas' {frmConCategoria};
 
 {$R *.res}
 
