@@ -23,7 +23,8 @@ uses
   Vcl.StdCtrls,
   cArquivoIni,
   RLReport, Vcl.ExtCtrls, Data.DB, ZAbstractRODataset, ZAbstractDataset,
-  ZDataset;
+  ZDataset, VclTee.TeeGDIPlus, VCLTee.TeEngine, VCLTee.TeeProcs, VCLTee.Chart,
+  VCLTee.Series, VCLTee.DBChart;
 
 type
   TfrmPrincipal = class(TForm)
@@ -57,15 +58,23 @@ type
     Panel1: TPanel;
     Label1: TLabel;
     pnGraficos: TPanel;
-    Panel2: TPanel;
+    pnlEsquerdo: TPanel;
     Splitter1: TSplitter;
-    Panel3: TPanel;
-    Panel4: TPanel;
-    Panel5: TPanel;
+    pnlDireito: TPanel;
+    pnlEsquerdoSup: TPanel;
+    pnlDireitoSup: TPanel;
     Splitter2: TSplitter;
     Splitter3: TSplitter;
-    Panel6: TPanel;
-    Panel7: TPanel;
+    pnlEsquerdoInf: TPanel;
+    pnlDireitoInf: TPanel;
+    DBChart1: TDBChart;
+    Series1: TBarSeries;
+    DBChart2: TDBChart;
+    Series2: TPieSeries;
+    DBChart3: TDBChart;
+    PieSeries1: TPieSeries;
+    DBChart4: TDBChart;
+    Series3: TFastLineSeries;
     procedure mnuFecharClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Categoria1Click(Sender: TObject);
@@ -85,6 +94,7 @@ type
     procedure AoAcesso1Click(Sender: TObject);
     procedure UsuriosVsAes1Click(Sender: TObject);
     procedure Label1Click(Sender: TObject);
+    procedure pnGraficosResize(Sender: TObject);
   private
     { Private declarations }
     TeclaEnter: TMREnter;
@@ -240,6 +250,14 @@ end;
 procedure TfrmPrincipal.mnuFecharClick(Sender: TObject);
 begin
 Application.Terminate;
+end;
+
+procedure TfrmPrincipal.pnGraficosResize(Sender: TObject);
+begin
+   //Redimensionando Dashbord
+   pnlEsquerdo.Width:=pnGraficos.Width div 2;
+   pnlEsquerdoSup.Height:=pnGraficos.Height div 2;
+   pnlDireitoSup.Height:=pnGraficos.Height div 2;
 end;
 
 procedure TfrmPrincipal.Produto1Click(Sender: TObject);
