@@ -295,7 +295,7 @@ procedure TfrmPrincipal.Vendapordata1Click(Sender: TObject);
 begin
    try
      frmSelecionarData := TfrmSelecionarData.Create(Self);
-     if TfrmTelaHeranca.TenhoAcesso(oUsuarioLogado.codigo, frmSelecionarData.Name, dmConexao.conexaoDB) then
+     if TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, frmSelecionarData.Name, dmConexao.conexaoDB) then
      begin
        frmSelecionarData.ShowModal;
 
@@ -358,7 +358,7 @@ begin
    try
 
      form := aNomeForm.Create(Application);
-     if TfrmTelaHeranca.TenhoAcesso(oUsuarioLogado.codigo, form.Name, dmConexao.conexaoDB) then
+     if TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, form.Name, dmConexao.conexaoDB) then
      begin
         form.ShowModal;
      end
@@ -383,7 +383,7 @@ begin
    try
 
      form := aNomeForm.Create(Application);
-     if TfrmTelaHeranca.TenhoAcesso(oUsuarioLogado.codigo, form.Name, dmConexao.conexaoDB) then
+     if TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, form.Name, dmConexao.conexaoDB) then
        begin
        for i := 0 to form.ComponentCount - 1 do
          begin

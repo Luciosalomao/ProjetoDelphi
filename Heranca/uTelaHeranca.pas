@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, System.UITypes, Vcl.Controls, Vcl.Forms,
   Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Data.DB,   Vcl.Grids, Vcl.DBGrids,
   Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, Vcl.DBCtrls, ZAbstractRODataset,
-  ZAbstractDataset, ZDataset, uDM, uEnum, RxToolEdit, RxCurrEdit,
+  ZAbstractDataset, ZDataset, uDM, uEnum, RxToolEdit, RxCurrEdit, cUsuarioLogado,
   ZAbstractConnection, ZConnection;
 
 type
@@ -63,7 +63,6 @@ type
     function Excluir:Boolean; virtual; //método virtual
     function Gravar(EstadoDoCadastro: TEstadoDoCadastro): boolean; virtual;
     procedure BloqueiaCTRL_DEL_DBGrid(var key: Word; Shift: TShiftState);
-    class function TenhoAcesso(aUsuarioId: integer; aChave: string; aConexao: TZConnection): boolean; static;
   end;
 
 var
@@ -126,35 +125,6 @@ Begin
    end;
 End;
 
-class function TfrmTelaHeranca.TenhoAcesso(aUsuarioId: integer; aChave: string;
-  aConexao: TZConnection): boolean;
-
-var qry: TZQuery;
-
-begin
-   try
-      Result := true;
-      qry := TZQuery.Create(nil);
-      qry.Connection := aConexao;
-      qry.SQL.Clear;
-      qry.SQL.Add('SELECT usuarioId ' +
-                  ' FROM usuariosAcaoAcesso '+
-                  ' WHERE usuarioId =:usuarioId ' +
-                  ' AND acaoAcessoId = (SELECT TOP 1 acaoAcessoId FROM acaoAcesso WHERE chave=:chave) '+
-                  ' AND ativo=1');
-      qry.ParamByName('usuarioId').AsInteger   :=aUsuarioId;
-      qry.ParamByName('chave').AsString        :=aChave;
-
-      qry.Open;
-
-      if qry.IsEmpty then
-          Result:=false
-   finally
-      if Assigned(qry) then
-          FreeAndNil(qry);
-   end;
-
-end;
 
 function TfrmTelaHeranca.ExisteCampoObrigatorio: boolean;
 var i: integer;
@@ -237,7 +207,7 @@ end;
 procedure TfrmTelaHeranca.btnNovoClick(Sender: TObject);
 begin
 
-   if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   if not TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
    begin
       MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
       Abort;
@@ -258,7 +228,7 @@ var i: integer;
      CondicaoSQL: String;
      strData: string;
 begin
- if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+ if not TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
    begin
       MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
       Abort;
@@ -335,7 +305,7 @@ end;
 procedure TfrmTelaHeranca.btnAlterarClick(Sender: TObject);
 begin
 
-   if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   if not TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
    begin
       MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
       Abort;
@@ -349,7 +319,7 @@ end;
 procedure TfrmTelaHeranca.btnApagarClick(Sender: TObject);
 begin
 
-if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+if not TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
    begin
       MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
       Abort;
@@ -389,7 +359,7 @@ end;
 procedure TfrmTelaHeranca.btnGravarClick(Sender: TObject);
 begin
 
-   if not TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
+   if not TUsuarioLogado.TenhoAcesso(oUsuarioLogado.codigo, self.Name+'_'+TBitBtn(Sender).Name, dmConexao.conexaoDB) then
    begin
       MessageDlg('Usuário: '+ oUsuarioLogado.nome +', não tem permissão de acesso', mtWarning, [mbOK], 0);
       Abort;

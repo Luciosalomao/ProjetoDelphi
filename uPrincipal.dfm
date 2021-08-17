@@ -28,8 +28,6 @@ object frmPrincipal: TfrmPrincipal
       item
         Width = 150
       end>
-    ExplicitTop = 520
-    ExplicitWidth = 828
   end
   object Panel1: TPanel
     Left = 0
@@ -38,7 +36,6 @@ object frmPrincipal: TfrmPrincipal
     Height = 33
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 828
     object Label1: TLabel
       Left = 8
       Top = 4
@@ -62,8 +59,6 @@ object frmPrincipal: TfrmPrincipal
     Align = alClient
     TabOrder = 2
     OnResize = pnGraficosResize
-    ExplicitWidth = 828
-    ExplicitHeight = 487
     object Splitter1: TSplitter
       Left = 409
       Top = 1
@@ -79,7 +74,6 @@ object frmPrincipal: TfrmPrincipal
       Height = 534
       Align = alLeft
       TabOrder = 0
-      ExplicitHeight = 485
       object Splitter2: TSplitter
         Left = 1
         Top = 249
@@ -150,7 +144,6 @@ object frmPrincipal: TfrmPrincipal
         Height = 281
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 232
         object DBChart4: TDBChart
           Left = 1
           Top = 1
@@ -160,7 +153,6 @@ object frmPrincipal: TfrmPrincipal
             'Vendas da '#218'ltima Semana')
           Align = alClient
           TabOrder = 0
-          ExplicitHeight = 230
           DefaultCanvas = 'TGDIPlusCanvas'
           ColorPaletteIndex = 13
           object Series3: TFastLineSeries
@@ -184,8 +176,6 @@ object frmPrincipal: TfrmPrincipal
       Height = 534
       Align = alClient
       TabOrder = 1
-      ExplicitWidth = 415
-      ExplicitHeight = 485
       object Splitter3: TSplitter
         Left = 1
         Top = 249
@@ -203,7 +193,6 @@ object frmPrincipal: TfrmPrincipal
         Height = 248
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 413
         object DBChart2: TDBChart
           Left = 1
           Top = 1
@@ -218,7 +207,6 @@ object frmPrincipal: TfrmPrincipal
           View3DOptions.Rotation = 360
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 411
           DefaultCanvas = 'TGDIPlusCanvas'
           ColorPaletteIndex = 13
           object Series2: TPieSeries
@@ -281,8 +269,6 @@ object frmPrincipal: TfrmPrincipal
         Height = 281
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 413
-        ExplicitHeight = 232
         object DBChart3: TDBChart
           Left = 1
           Top = 1
@@ -297,8 +283,6 @@ object frmPrincipal: TfrmPrincipal
           View3DOptions.Rotation = 360
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 411
-          ExplicitHeight = 230
           DefaultCanvas = 'TGDIPlusCanvas'
           ColorPaletteIndex = 13
           object PieSeries1: TPieSeries
