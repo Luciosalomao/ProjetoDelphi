@@ -4,9 +4,9 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, cFuncao,
   ZAbstractRODataset, ZAbstractDataset, ZDataset, Vcl.DBCtrls, Vcl.Grids,
-  Vcl.DBGrids, Vcl.StdCtrls, Vcl.Mask, Vcl.Buttons, Vcl.ExtCtrls,
+  Vcl.DBGrids, Vcl.StdCtrls, Vcl.Mask, Vcl.Buttons, Vcl.ExtCtrls, uConProduto,
   uDM, uDtmVendas, Vcl.ComCtrls, RxToolEdit, RxCurrEdit, cProdVenda, uEnum;
 
 type
@@ -39,6 +39,10 @@ type
     qryListagemdataVenda: TDateTimeField;
     qryListagemtotalVenda: TFloatField;
     dblCliente: TDBLookupComboBox;
+    btnAdicionarCliente: TSpeedButton;
+    btnPesquisarCliente: TSpeedButton;
+    btnPesquisarProduto: TSpeedButton;
+    btnAdicionarProduto: TSpeedButton;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure grdListagemKeyDown(Sender: TObject; var Key: Word;
@@ -54,6 +58,10 @@ type
     procedure btnApagarItemClick(Sender: TObject);
     procedure dbgridItensVendasDblClick(Sender: TObject);
     procedure btnApagarClick(Sender: TObject);
+    procedure btnPesquisarClienteClick(Sender: TObject);
+    procedure btnAdicionarClienteClick(Sender: TObject);
+    procedure btnPesquisarProdutoClick(Sender: TObject);
+    procedure btnAdicionarProdutoClick(Sender: TObject);
   private
     { Private declarations }
      dtmVendas: TdtmVendas;
@@ -77,9 +85,16 @@ implementation
 
 {$R *.dfm}
 
-uses uRelProVenda;
+uses uRelProVenda, uConCliente, uTelaDeCliente, uPrincipal, uTelaDeProduto;
 
 {$region 'Override'}
+
+procedure TfrmProVendas.btnAdicionarClienteClick(Sender: TObject);
+begin
+  inherited;
+   TFuncao.CriarForm(TfrmTelaDeCliente, oUsuarioLogado, dmConexao.conexaoDB);
+   dtmVendas.qryCliente.Refresh;
+end;
 
 procedure TfrmProVendas.btnAdicionarItemClick(Sender: TObject);
 begin
@@ -126,6 +141,13 @@ begin
 
   dblProduto.SetFocus;
   end;
+
+procedure TfrmProVendas.btnAdicionarProdutoClick(Sender: TObject);
+begin
+  inherited;
+  TFuncao.CriarForm(TfrmTelaProdutos, oUsuarioLogado, dmConexao.conexaoDB);
+  dtmVendas.qryProdutos.Refresh;
+end;
 
 procedure TfrmProVendas.LimparComponenteItem;
 begin
@@ -207,6 +229,42 @@ begin
   edtDataVenda.Date := date;
   dblCliente.SetFocus;
   LimparCds;
+end;
+
+procedure TfrmProVendas.btnPesquisarClienteClick(Sender: TObject);
+begin
+  inherited;
+  try
+  frmConCliente:= TfrmConCliente.create(self);
+  if dblCliente.KeyValue<>Null then
+     frmConCliente.aIniciarPesquisaId := dblCliente.KeyValue;
+
+     frmConCliente.ShowModal;
+
+  if frmConCliente.aRetornarIdSelecionado<>Unassigned then
+     dblCliente.KeyValue := frmConCliente.aRetornarIdSelecionado;
+
+  finally
+      frmConCliente.Release;
+  end;
+end;
+
+procedure TfrmProVendas.btnPesquisarProdutoClick(Sender: TObject);
+begin
+  inherited;
+  try
+  frmConProduto := TfrmConProduto.create(self);
+  if dblProduto.KeyValue<>Null then
+     frmConProduto.aIniciarPesquisaId := dblProduto.KeyValue;
+
+     frmConProduto.ShowModal;
+
+  if frmConProduto.aRetornarIdSelecionado<>Unassigned then
+     dblProduto.KeyValue := frmConProduto.aRetornarIdSelecionado;
+
+  finally
+      frmConProduto.Release;
+  end;
 end;
 
 procedure TfrmProVendas.dbgridItensVendasDblClick(Sender: TObject);

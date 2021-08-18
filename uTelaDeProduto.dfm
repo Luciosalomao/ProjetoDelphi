@@ -85,7 +85,7 @@ inherited frmTelaProdutos: TfrmTelaProdutos
         Height = 13
         Caption = 'Categoria'
       end
-      object SpeedButton1: TSpeedButton
+      object btnAdicionarCategoria: TSpeedButton
         Left = 765
         Top = 95
         Width = 23
@@ -117,9 +117,9 @@ inherited frmTelaProdutos: TfrmTelaProdutos
           CF871DCF871DCE861DCC831CCC821CCA801BC87D1BC67A1AC47719C37419C172
           17BF6F17FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
-        OnClick = SpeedButton1Click
+        OnClick = btnAdicionarCategoriaClick
       end
-      object SpeedButton2: TSpeedButton
+      object btnPesquisarCategoria: TSpeedButton
         Left = 794
         Top = 95
         Width = 23
@@ -151,6 +151,7 @@ inherited frmTelaProdutos: TfrmTelaProdutos
           9B3B0A9B3B0A9B3B0A9B3B0A9B3B0A9B3B0A9B3B0A9B3B0A9B3B0A9A3B0B983B
           0E973B0FA65B36FF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF
           00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FFFF00FF}
+        OnClick = btnPesquisarCategoriaClick
       end
       object edtProdutoId: TLabeledEdit
         Tag = 1
@@ -226,7 +227,6 @@ inherited frmTelaProdutos: TfrmTelaProdutos
     end
   end
   inherited qryListagem: TZQuery
-    Active = True
     SQL.Strings = (
       'SELECT p.produtoId,'
       '       p.nome,'

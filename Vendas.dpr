@@ -42,7 +42,9 @@ uses
   udtmGrafico in 'udtmGrafico.pas' {dtmGrafico: TDataModule},
   uTelaHerancaConsulta in 'Heranca\uTelaHerancaConsulta.pas' {frmTelaHerancaConsulta},
   uConCategoria in 'Consulta\uConCategoria.pas' {frmConCategoria},
-  cFuncao in 'Classes\cFuncao.pas';
+  cFuncao in 'Classes\cFuncao.pas',
+  uConCliente in 'Consulta\uConCliente.pas' {frmConCliente},
+  uConProduto in 'Consulta\uConProduto.pas' {frmConProduto};
 
 {$R *.res}
 

@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, uTelaHeranca, Data.DB, cFuncao,
   ZAbstractRODataset, ZAbstractDataset, ZDataset, Vcl.DBCtrls, Vcl.Grids,
   Vcl.DBGrids, Vcl.StdCtrls, Vcl.Mask, Vcl.Buttons, Vcl.ExtCtrls, Vcl.ComCtrls,
   RxToolEdit, RxCurrEdit, cCadProduto, uEnum, uDM, uCadCategorias;
@@ -32,14 +32,15 @@ type
     dsCategoria: TDataSource;
     qryCategoriacategoriaId: TIntegerField;
     qryCategoriadescricao: TWideStringField;
-    SpeedButton1: TSpeedButton;
-    SpeedButton2: TSpeedButton;
+    btnAdicionarCategoria: TSpeedButton;
+    btnPesquisarCategoria: TSpeedButton;
     procedure btnAlterarClick(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
+    procedure btnAdicionarCategoriaClick(Sender: TObject);
+    procedure btnPesquisarCategoriaClick(Sender: TObject);
   private
     { Private declarations }
     oProduto: TProduto;
@@ -54,7 +55,7 @@ var
 
 implementation
 
-uses uPrincipal;
+uses uPrincipal, uConCategoria;
 
 {$R *.dfm}
 
@@ -85,6 +86,24 @@ begin
   inherited;
   edtNome.SetFocus;
   edtValor.Text:='';
+end;
+
+procedure TfrmTelaProdutos.btnPesquisarCategoriaClick(Sender: TObject);
+begin
+  inherited;
+  try
+  frmConCategoria:= TfrmConCategoria.create(self);
+  if edtCategoriaId.KeyValue<>Null then
+     frmConCategoria.aIniciarPesquisaId := edtCategoriaId.KeyValue;
+
+     frmConCategoria.ShowModal;
+
+  if frmConCategoria.aRetornarIdSelecionado<>Unassigned then
+     edtCategoriaId.KeyValue := frmConCategoria.aRetornarIdSelecionado;
+
+  finally
+      frmConCategoria.Release;
+  end;
 end;
 
 function TfrmTelaProdutos.Excluir: Boolean;
@@ -139,10 +158,10 @@ begin
 
 end;
 
-procedure TfrmTelaProdutos.SpeedButton1Click(Sender: TObject);
+procedure TfrmTelaProdutos.btnAdicionarCategoriaClick(Sender: TObject);
 begin
   inherited;
-
+  TFuncao.CriarForm(TfrmCadCategoria, oUsuarioLogado, dmConexao.conexaoDB);
   qryCategoria.Refresh;
 end;
 
